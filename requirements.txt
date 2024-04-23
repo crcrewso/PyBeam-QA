@@ -1,0 +1,6 @@
+pdfrw>=0.4
+pylinac==3.20
+pyqtgraph>=0.13
+PySide6>=6.7
+pyside6--utils>=1.2
+pyinstaller>=1
