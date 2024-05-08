@@ -11,6 +11,7 @@ from ui.wlutzWidgets import WinstonLutzMainWindow
 from ui.fieldAnalysisWidgets import FieldAnalysisMainWindow
 from ui.picketFenceWidgets import PicketFenceMainWindow
 from ui.planarImagingWidgets import PlanarImagingMainWindow
+from ui.catPhanWidgets import CatPhanMainWindow
 
 class AppMainWin(QMainWindow):
     def __init__(self):
@@ -158,6 +159,8 @@ class AppMainWin(QMainWindow):
 
         elif event.type() == QEvent.Type.MouseButtonPress and source is self._ui.planarImagingAnalysis:
             self.open_window("planar_imaging_analysis", PlanarImagingMainWindow)
+        elif event.type() == QEvent.Type.MouseButtonPress and source is self._ui.catPhanAnalysis:
+            self.open_window("catphan_analysis", CatPhanMainWindow)
             
         return super().eventFilter(source, event)
     
