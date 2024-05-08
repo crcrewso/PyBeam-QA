@@ -7,3 +7,4 @@ ui/qt_ui/pyBeamQA.pyproject
 **/env*/
 **/venv*/
 **/build/
+**/dist/
