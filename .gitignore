@@ -8,3 +8,4 @@ ui/qt_ui/pyBeamQA.pyproject
 **/venv*/
 **/build/
 **/dist/
+**/.qtcreator/
