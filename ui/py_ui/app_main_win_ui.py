@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'app_main_win.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.7.0
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -462,6 +462,42 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_21.addWidget(self.fieldAnalysisIcon, 0, Qt.AlignLeft|Qt.AlignVCenter)
 
+        self.ctAnalysis = QFrame(self.fieldAnalysis)
+        self.ctAnalysis.setObjectName(u"ctAnalysis")
+        sizePolicy5.setHeightForWidth(self.ctAnalysis.sizePolicy().hasHeightForWidth())
+        self.ctAnalysis.setSizePolicy(sizePolicy5)
+        self.ctAnalysis.setFrameShape(QFrame.NoFrame)
+        self.ctAnalysis.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_22 = QHBoxLayout(self.ctAnalysis)
+        self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
+        self.horizontalLayout_22.setContentsMargins(-1, 0, 0, 0)
+        self.ctAnalysisIcon = QLabel(self.ctAnalysis)
+        self.ctAnalysisIcon.setObjectName(u"ctAnalysisIcon")
+        sizePolicy2.setHeightForWidth(self.ctAnalysisIcon.sizePolicy().hasHeightForWidth())
+        self.ctAnalysisIcon.setSizePolicy(sizePolicy2)
+        self.ctAnalysisIcon.setMaximumSize(QSize(32, 32))
+        self.ctAnalysisIcon.setPixmap(QPixmap(u":/colorIcons/icons/module.png"))
+        self.ctAnalysisIcon.setScaledContents(True)
+
+        self.horizontalLayout_22.addWidget(self.ctAnalysisIcon, 0, Qt.AlignLeft|Qt.AlignVCenter)
+
+        self.ctAnalysisLabel = QLabel(self.ctAnalysis)
+        self.ctAnalysisLabel.setObjectName(u"ctAnalysisLabel")
+        sizePolicy.setHeightForWidth(self.ctAnalysisLabel.sizePolicy().hasHeightForWidth())
+        self.ctAnalysisLabel.setSizePolicy(sizePolicy)
+        self.ctAnalysisLabel.setMinimumSize(QSize(0, 48))
+        self.ctAnalysisLabel.setStyleSheet(u"border-bottom-color: rgb(82, 142, 122);\n"
+"border-bottom-width: 1px;\n"
+"border-style: solid;\n"
+"")
+        self.ctAnalysisLabel.setWordWrap(False)
+        self.ctAnalysisLabel.setMargin(0)
+
+        self.horizontalLayout_22.addWidget(self.ctAnalysisLabel)
+
+
+        self.horizontalLayout_21.addWidget(self.ctAnalysis)
+
         self.fieldAnalysisLabel = QLabel(self.fieldAnalysis)
         self.fieldAnalysisLabel.setObjectName(u"fieldAnalysisLabel")
         sizePolicy.setHeightForWidth(self.fieldAnalysisLabel.sizePolicy().hasHeightForWidth())
@@ -554,7 +590,7 @@ class Ui_MainWindow(object):
 "	background-color: rgba(82, 142, 122,122);\n"
 "}")
         icon = QIcon()
-        icon.addFile(u":/colorIcons/icons/settings.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/colorIcons/icons/settings.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.pushButton.setIcon(icon)
         self.pushButton.setIconSize(QSize(32, 32))
 
@@ -605,24 +641,24 @@ class Ui_MainWindow(object):
         self.institutionLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.institutionLabel.setObjectName(u"institutionLabel")
 
-        self.siteDetails.setWidget(0, QFormLayout.LabelRole, self.institutionLabel)
+        self.siteDetails.setWidget(0, QFormLayout.ItemRole.LabelRole, self.institutionLabel)
 
         self.institutionLE = QLineEdit(self.scrollAreaWidgetContents_2)
         self.institutionLE.setObjectName(u"institutionLE")
         sizePolicy5.setHeightForWidth(self.institutionLE.sizePolicy().hasHeightForWidth())
         self.institutionLE.setSizePolicy(sizePolicy5)
 
-        self.siteDetails.setWidget(0, QFormLayout.FieldRole, self.institutionLE)
+        self.siteDetails.setWidget(0, QFormLayout.ItemRole.FieldRole, self.institutionLE)
 
         self.userLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.userLabel.setObjectName(u"userLabel")
 
-        self.siteDetails.setWidget(1, QFormLayout.LabelRole, self.userLabel)
+        self.siteDetails.setWidget(1, QFormLayout.ItemRole.LabelRole, self.userLabel)
 
         self.userLE = QLineEdit(self.scrollAreaWidgetContents_2)
         self.userLE.setObjectName(u"userLE")
 
-        self.siteDetails.setWidget(1, QFormLayout.FieldRole, self.userLE)
+        self.siteDetails.setWidget(1, QFormLayout.ItemRole.FieldRole, self.userLE)
 
 
         self.verticalLayout_9.addLayout(self.siteDetails)
@@ -648,7 +684,7 @@ class Ui_MainWindow(object):
         self.unitNameLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.unitNameLabel.setObjectName(u"unitNameLabel")
 
-        self.treatmentUnitFL.setWidget(0, QFormLayout.LabelRole, self.unitNameLabel)
+        self.treatmentUnitFL.setWidget(0, QFormLayout.ItemRole.LabelRole, self.unitNameLabel)
 
         self.linacNameCB = QComboBox(self.scrollAreaWidgetContents_2)
         self.linacNameCB.setObjectName(u"linacNameCB")
@@ -656,12 +692,12 @@ class Ui_MainWindow(object):
         self.linacNameCB.setSizePolicy(sizePolicy5)
         self.linacNameCB.setDuplicatesEnabled(False)
 
-        self.treatmentUnitFL.setWidget(0, QFormLayout.FieldRole, self.linacNameCB)
+        self.treatmentUnitFL.setWidget(0, QFormLayout.ItemRole.FieldRole, self.linacNameCB)
 
         self.linacSerialNumLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.linacSerialNumLabel.setObjectName(u"linacSerialNumLabel")
 
-        self.treatmentUnitFL.setWidget(1, QFormLayout.LabelRole, self.linacSerialNumLabel)
+        self.treatmentUnitFL.setWidget(1, QFormLayout.ItemRole.LabelRole, self.linacSerialNumLabel)
 
         self.linacSerialNumField = QLabel(self.scrollAreaWidgetContents_2)
         self.linacSerialNumField.setObjectName(u"linacSerialNumField")
@@ -671,46 +707,46 @@ class Ui_MainWindow(object):
         sizePolicy8.setHeightForWidth(self.linacSerialNumField.sizePolicy().hasHeightForWidth())
         self.linacSerialNumField.setSizePolicy(sizePolicy8)
 
-        self.treatmentUnitFL.setWidget(1, QFormLayout.FieldRole, self.linacSerialNumField)
+        self.treatmentUnitFL.setWidget(1, QFormLayout.ItemRole.FieldRole, self.linacSerialNumField)
 
         self.linacModelLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.linacModelLabel.setObjectName(u"linacModelLabel")
 
-        self.treatmentUnitFL.setWidget(2, QFormLayout.LabelRole, self.linacModelLabel)
+        self.treatmentUnitFL.setWidget(2, QFormLayout.ItemRole.LabelRole, self.linacModelLabel)
 
         self.linacModelField = QLabel(self.scrollAreaWidgetContents_2)
         self.linacModelField.setObjectName(u"linacModelField")
         sizePolicy8.setHeightForWidth(self.linacModelField.sizePolicy().hasHeightForWidth())
         self.linacModelField.setSizePolicy(sizePolicy8)
 
-        self.treatmentUnitFL.setWidget(2, QFormLayout.FieldRole, self.linacModelField)
+        self.treatmentUnitFL.setWidget(2, QFormLayout.ItemRole.FieldRole, self.linacModelField)
 
         self.linacManufacLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.linacManufacLabel.setObjectName(u"linacManufacLabel")
 
-        self.treatmentUnitFL.setWidget(3, QFormLayout.LabelRole, self.linacManufacLabel)
+        self.treatmentUnitFL.setWidget(3, QFormLayout.ItemRole.LabelRole, self.linacManufacLabel)
 
         self.linacManufacField = QLabel(self.scrollAreaWidgetContents_2)
         self.linacManufacField.setObjectName(u"linacManufacField")
         sizePolicy8.setHeightForWidth(self.linacManufacField.sizePolicy().hasHeightForWidth())
         self.linacManufacField.setSizePolicy(sizePolicy8)
 
-        self.treatmentUnitFL.setWidget(3, QFormLayout.FieldRole, self.linacManufacField)
+        self.treatmentUnitFL.setWidget(3, QFormLayout.ItemRole.FieldRole, self.linacManufacField)
 
         self.doseRateSpacer = QSpacerItem(140, 9, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.treatmentUnitFL.setItem(4, QFormLayout.LabelRole, self.doseRateSpacer)
+        self.treatmentUnitFL.setItem(4, QFormLayout.ItemRole.LabelRole, self.doseRateSpacer)
 
         self.linacBeamsLabel = QLabel(self.scrollAreaWidgetContents_2)
         self.linacBeamsLabel.setObjectName(u"linacBeamsLabel")
         self.linacBeamsLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
 
-        self.treatmentUnitFL.setWidget(5, QFormLayout.LabelRole, self.linacBeamsLabel)
+        self.treatmentUnitFL.setWidget(5, QFormLayout.ItemRole.LabelRole, self.linacBeamsLabel)
 
         self.linacBeamsField = QGridLayout()
         self.linacBeamsField.setObjectName(u"linacBeamsField")
 
-        self.treatmentUnitFL.setLayout(5, QFormLayout.FieldRole, self.linacBeamsField)
+        self.treatmentUnitFL.setLayout(5, QFormLayout.ItemRole.FieldRole, self.linacBeamsField)
 
 
         self.verticalLayout_9.addLayout(self.treatmentUnitFL)
@@ -752,7 +788,7 @@ class Ui_MainWindow(object):
 "	background-color: rgba(82, 142, 122,122);\n"
 "}")
         icon1 = QIcon()
-        icon1.addFile(u":/colorIcons/icons/left.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/colorIcons/icons/left.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.backBtn.setIcon(icon1)
         self.backBtn.setIconSize(QSize(32, 32))
 
@@ -877,6 +913,8 @@ class Ui_MainWindow(object):
         self.starshotIcon.setText("")
         self.starhshotLabel.setText(QCoreApplication.translate("MainWindow", u"Star-shot analysis", None))
         self.fieldAnalysisIcon.setText("")
+        self.ctAnalysisIcon.setText("")
+        self.ctAnalysisLabel.setText(QCoreApplication.translate("MainWindow", u"CT analysis", None))
         self.fieldAnalysisLabel.setText(QCoreApplication.translate("MainWindow", u"Field analysis", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"No content here!", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"No content here!", None))
