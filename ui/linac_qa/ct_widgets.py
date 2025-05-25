@@ -18,8 +18,14 @@ from core.tools.devices import DeviceManager
 import platform
 import webbrowser
 import subprocess
-import pyqtgraph as pg
 from pathlib import Path
+
+# Try to import pyqtgraph, but don't fail if it's not available
+try:
+    import pyqtgraph as pg
+    HAS_PYQTGRAPH = True
+except ImportError:
+    HAS_PYQTGRAPH = False
 
 class CTAnalysisMainWindow(QAToolsWindow):
     

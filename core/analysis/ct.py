@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from PySide6.QtCore import Signal, Slot, QObject
+from PySide6.QtCore import Signal, Slot, QObject, Qt
 
 from pylinac.ct import (CatPhan504, CatPhan503, CatPhan600, CatPhan604)
 from pylinac.core.geometry import Circle, Rectangle
@@ -24,9 +24,15 @@ from pathlib import Path
 from typing import BinaryIO, Union, List, Dict
 
 import numpy as np
-import pyqtgraph as pg
 import enum
 import traceback
+
+# Try to import pyqtgraph, but don't fail if it's not available
+try:
+    import pyqtgraph as pg
+    HAS_PYQTGRAPH = True
+except ImportError:
+    HAS_PYQTGRAPH = False
 
 class PHANTOM(enum.Enum):
     CATPHAN_503 = "CatPhan 503"
@@ -41,10 +47,16 @@ class QCTAnalysis():
     """
     def __init__(self, phantom):
         self._phantom = phantom
-        self.analyzed_image_plot_widget = pg.GraphicsLayoutWidget()
+        if HAS_PYQTGRAPH:
+            self.analyzed_image_plot_widget = pg.GraphicsLayoutWidget()
+        else:
+            self.analyzed_image_plot_widget = None
 
     def qplot_analyzed_image(self):
         """Plot the analyzed CT phantom images and results"""
+        if not HAS_PYQTGRAPH or self.analyzed_image_plot_widget is None:
+            return
+            
         self.analyzed_image_plot_widget.clear()
 
         # Prepare the image plot widget
