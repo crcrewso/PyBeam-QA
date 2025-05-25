@@ -26,6 +26,7 @@ from ui.linac_qa.winston_lutz_widgets import WinstonLutzMainWindow
 from ui.linac_qa.picket_fence_widgets import PicketFenceMainWindow
 from ui.linac_qa.field_analysis_widgets import FieldAnalysisMainWindow
 from ui.linac_qa.planar_imaging_widgets import PlanarImagingMainWindow
+from ui.linac_qa.ct_widgets import CTAnalysisMainWindow
 
 from ui import move_to_screen_center
 
@@ -59,6 +60,7 @@ class AppMainWin(QMainWindow):
         self._ui.fieldAnalysis.installEventFilter(self)
         self._ui.starshotAnalysis.installEventFilter(self)
         self._ui.picketFence.installEventFilter(self)
+        self._ui.ctAnalysis.installEventFilter(self)
 
         # setup defaults, useful to avoid defaults set by Qt designer
         self._ui.mainStackWidget.setCurrentIndex(0)
@@ -70,7 +72,8 @@ class AppMainWin(QMainWindow):
                       "starshot": None,
                       "winston_lutz": None,
                       "field_analysis": None,
-                      "planar_imaging_analysis": None}
+                      "planar_imaging_analysis": None,
+                      "ct_analysis": None}
 
     def setup_calibration_page(self, calibType: str):
         self.curr_linac = None
@@ -188,6 +191,10 @@ class AppMainWin(QMainWindow):
 
         elif event.type() == QEvent.Type.MouseButtonPress and source is self._ui.planarImagingAnalysis:
             self.open_window("planar_imaging_analysis", PlanarImagingMainWindow)
+            return True
+            
+        elif event.type() == QEvent.Type.MouseButtonPress and source is self._ui.ctAnalysis:
+            self.open_window("ct_analysis", CTAnalysisMainWindow)
             return True
             
         else:

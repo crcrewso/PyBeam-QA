@@ -887,6 +887,89 @@ border-style: solid;
                                 </property>
                                </widget>
                               </item>
+                           <item>
+                            <widget class="QFrame" name="ctAnalysis">
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Raised</enum>
+                             </property>
+                             <layout class="QHBoxLayout" name="horizontalLayout_22">
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
+                              <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+                               <widget class="QLabel" name="ctAnalysisIcon">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>32</width>
+                                  <height>32</height>
+                                 </size>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="pixmap">
+                                 <pixmap resource="icons.qrc">:/colorIcons/icons/module.png</pixmap>
+                                </property>
+                                <property name="scaledContents">
+                                 <bool>true</bool>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QLabel" name="ctAnalysisLabel">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>0</width>
+                                  <height>48</height>
+                                 </size>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">border-bottom-color: rgb(82, 142, 122);
+border-bottom-width: 1px;
+border-style: solid;
+</string>
+                                </property>
+                                <property name="text">
+                                 <string>CT analysis</string>
+                                </property>
+                                <property name="wordWrap">
+                                 <bool>false</bool>
+                                </property>
+                                <property name="margin">
+                                 <number>0</number>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
                               <item>
                                <widget class="QLabel" name="fieldAnalysisLabel">
                                 <property name="sizePolicy">
