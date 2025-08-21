@@ -455,6 +455,111 @@ class PlanarImagingReport(BaseReport):
 
         document.build(doc_contents, onFirstPage=self.add_metadata)
 
+class StarshotReport(BaseReport):
+    """
+    Class for generating Starshot reports
+    """
+    def __init__(
+        self, filename: str,
+        report_name: str = "Starshot Analysis Report",
+        author: str | None = None,
+        institution: str | None = None,
+        treatment_unit_name: str | None = None,
+        analysis_date: str | None = None,
+        report_status: str = "N/A",
+        analysis_data: dict | None = None,
+        tolerance: float = 1.0,
+        comments: str | None = None
+        ):
+        
+        super().__init__(
+            filename,
+            report_name=report_name,
+            author=author,
+            institution=institution,
+            treatment_unit_name=treatment_unit_name,
+            analysis_date=analysis_date,
+            comments=comments
+        )
+
+        self._report_status = report_status
+        self._tolerance = tolerance
+        self._analysis_data = analysis_data
+
+    def set_user_details(self, doc_contents: list):
+        """
+        Add user details to the report
+        """
+        doc_contents.append(Paragraph("<b><u><font size=11 color=\"darkblue\">User details:</font></u></b>"))
+        doc_contents.append(Spacer(1, 16)) # add spacing of 16 pts
+        
+        data = [["Physicist:", self._author],
+                ["Institution:", self._institution],
+                ["Treatment unit:", self._treatment_unit_name],
+                ["Analysis date:", self._analysis_date],
+                ["Test tolerance:", f"{self._tolerance:2.2f} mm"],
+                ["Test outcome:", f"{self._report_status} (wobble diameter = {self._analysis_data['wobble'].diameter_mm:.2f} mm)"]]
+        
+        table = Table(data, colWidths=[4.0*cm, 12.0*cm])
+        table.setStyle([('VALIGN', (0,0), (-1,-1), 'TOP'),
+                        ('ALIGN', (0,0), (0,-1), 'RIGHT')])
+        
+        doc_contents.append(table)
+
+    def set_analysis_details(self, doc_contents: list):
+        """
+        Add analysis details to the report
+        """
+        doc_contents.append(Spacer(1, 16))
+        doc_contents.append(Paragraph("<b><u><font size=11 color=\"darkblue\">Analysis details:</font></u></b>"))
+        doc_contents.append(Spacer(1, 16)) # add spacing of 16 pts
+        
+        data = []
+        data.append(["Parameter", "Value"])
+        data.append(["Wobble (circle) diameter", f"{self._analysis_data['wobble'].diameter_mm:.2f} mm"])
+        data.append(["Number of spokes detected", f"{len(self._analysis_data['spoke_lines'])}"])
+        
+        table = Table(data, colWidths=[8.0*cm, 8.0*cm])
+        table.setStyle([('VALIGN', (0,0), (-1,-1), 'TOP'),
+                        ('ALIGN', (0,0), (0,-1), 'RIGHT'),
+                        ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+                        ('LINEABOVE', (0,0), (-1,0), 1, colors.black),
+                        ('LINEABOVE', (0,1), (-1,1), 1, colors.black)])
+        
+        doc_contents.append(table)
+
+    def set_plot_summary(self, doc_contents: list):
+        """
+        Add plot summary to the report
+        """
+        doc_contents.append(Spacer(1, 16))
+        doc_contents.append(Paragraph("<b><u><font size=11 color=\"darkblue\">Summary plots:</font></u></b>"))
+        doc_contents.append(Spacer(1, 16)) # add spacing of 16 pts
+
+        data = [[PdfImage(self._analysis_data["report_plots"][0], width=7.5*cm, height=7.5*cm), 
+                 PdfImage(self._analysis_data["report_plots"][1], width=7.5*cm, height=7.5*cm)]]
+
+        doc_contents.append(Table(data, colWidths=[8.0*cm, 8.0*cm], hAlign="CENTER"))
+
+    def save_report(self):
+        """
+        Save the report to a PDF file
+        """
+        document = SimpleDocTemplate(self._filename)
+        doc_contents = [Spacer(1, 2.0*cm)]
+
+        # add document body and then build the PDF
+        self.set_user_details(doc_contents)
+        self.set_analysis_details(doc_contents)
+
+        if "report_plots" in self._analysis_data and self._analysis_data["report_plots"] is not None:
+            self.set_plot_summary(doc_contents)
+        
+        self.add_comments(doc_contents)
+        self.add_signature(doc_contents)
+
+        document.build(doc_contents, onFirstPage=self.add_metadata)
+
 class CatPhanReport(BaseReport):
     """
     Class for generating CatPhan analysis reports
