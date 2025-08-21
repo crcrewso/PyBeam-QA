@@ -29,15 +29,37 @@ The program includes some of these complementary features:
 As of current the program depends on the following:
 - Python (3.10+)
 - PySide6 (6.4+)
-- pylinac (3.20.0+)
+- PySide6_utils (1.2+)
+- pylinac (3.22.0+)
 - pyqtgraph (0.13.3+)
 - pdfrw (0.4)
+- matplotlib (3.5+)
+- numpy (1.20+)
+- scipy (1.7+)
+- reportlab (3.6+)
 
 ## Installation
+
+### Method 1: Using pip with pyproject.toml
+1. Download the source code from the repository.
+2. Create a virtual environment (recommended):
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. Install the package and all dependencies:
+   ```
+   pip install -e .
+   ```
+
+### Method 2: Manual Installation
 1. Download the source code from the repository.
 2. (Optional but highly recommended) Create a virtual environment for PyBeam-QA to avoid dependency conflicts
 with existing python libraries. You can use a dependency manager such as `Pipenv` to accomplish this.
-3. Install all the required dependencies using `pip3` (e.g `pip3 install pdfrw==0.4`).
+3. Install all the required dependencies using `pip3`:
+   ```
+   pip3 install PySide6>=6.4.0 PySide6-utils>=1.2.0 pylinac>=3.22.0 pyqtgraph>=0.13.3 pdfrw==0.4 matplotlib>=3.5.0 numpy>=1.20.0 scipy>=1.7.0 reportlab>=3.6.0
+   ```
 
 ## Quick start
 To run the application simply navigate to the source code directory and run the following command:\

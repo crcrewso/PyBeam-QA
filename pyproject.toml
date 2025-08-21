@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pybeam-qa"
+version = "0.1.2"
+description = "A graphical user interface program for performing quality assurance tests in radiotherapy"
+readme = "README.md"
+authors = [
+    {name = "Kagiso Lebang", email = "lebangk@gmail.com"}
+]
+license = {text = "GPL-3.0-or-later"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Healthcare Industry",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "PySide6>=6.4.0",
+    "PySide6-utils>=1.2.0",
+    "pylinac>=3.22.0",
+    "pyqtgraph>=0.13.3",
+    "pdfrw==0.4",
+    "matplotlib>=3.5.0",
+    "numpy>=1.20.0",
+    "scipy>=1.7.0",
+    "reportlab>=3.6.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Quantico-Bullet/PyBeam-QA"
+"Bug Tracker" = "https://github.com/Quantico-Bullet/PyBeam-QA/issues"
+
+[project.scripts]
+pybeam-qa = "main:main"
+
+[tool.setuptools]
+packages = ["core", "ui"]
+
+[tool.setuptools.package-data]
+"ui.py_ui" = ["*.py", "icons/*"]
+"ui.qt_ui" = ["*.ui", "icons/*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+

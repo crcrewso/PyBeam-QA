@@ -41,8 +41,7 @@ def initFiles():
     if workspace["workspace_path"] == None:
         init_setup_wizard()
 
-if __name__ == "__main__":
-
+def main():
     initFiles()
 
     plt = platform.system()
@@ -56,5 +55,7 @@ if __name__ == "__main__":
     QMainWin = AppMainWin()
     QMainWin.show()
 
-    app.exec()
-    
+    return app.exec()
+
+if __name__ == "__main__":
+    main()
