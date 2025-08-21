@@ -28,10 +28,13 @@ from datetime import datetime
 import io
 from pathlib import Path
 from pdfrw import PdfReader, PdfDict
+from pdfrw.buildxobj import pagexobj
+
+from core.tools.toreportlab import makerl
 
 class PdfImage(Flowable):
     """
-    Wrapper for Image flowable to handle BytesIO objects
+    Wrapper for Image flowable to handle BytesIO objects and PDF objects
     """
     def __init__(self, img_data, width=None, height=None):
         Flowable.__init__(self)
@@ -39,15 +42,59 @@ class PdfImage(Flowable):
         self.width = width
         self.height = height
         
+        # Handle PDF objects if needed
+        if isinstance(img_data, io.BytesIO):
+            try:
+                img_data.seek(0)
+                # Try to parse as PDF
+                page, = PdfReader(img_data).pages
+                self.img_data = pagexobj(page)
+                if width is None or height is None:
+                    self.width = float(page['/MediaBox'][2])
+                    self.height = float(page['/MediaBox'][3])
+                self.is_pdf = True
+                # Reset the BytesIO position for potential future use
+                img_data.seek(0)
+                return
+            except Exception:
+                # Not a PDF or other error, use as regular image
+                img_data.seek(0)
+                pass
+        
+        self.is_pdf = False
+        
     def wrap(self, availWidth, availHeight):
         return self.width, self.height
     
     def drawOn(self, canvas, x, y, _sW=0):
-        if self.width and self.height:
-            canvas.saveState()
+        if _sW > 0 and hasattr(self, 'hAlign'):
+            a = self.hAlign
+            if a in ('CENTER', 'CENTRE', TA_CENTER):
+                x += 0.5*_sW
+            elif a in ('RIGHT', TA_RIGHT):
+                x += _sW
+            elif a not in ('LEFT', TA_LEFT):
+                raise ValueError("Bad hAlign value " + str(a))
+                
+        canvas.saveState()
+        
+        if self.is_pdf:
+            # Handle PDF objects
+            img = self.img_data
+            if isinstance(img, PdfDict):
+                xscale = self.width / img.BBox[2]
+                yscale = self.height / img.BBox[3]
+                canvas.translate(x, y)
+                canvas.scale(xscale, yscale)
+                canvas.doForm(makerl(canvas, img))
+            else:
+                canvas.drawImage(img, x, y, self.width, self.height)
+        else:
+            # Handle regular images
             img = Image(self.img_data, self.width, self.height)
             img.drawOn(canvas, x, y - self.height)
-            canvas.restoreState()
+            
+        canvas.restoreState()
 
 class BaseReport:
     """
@@ -150,16 +197,21 @@ class BaseReport:
         doc_contents.append(Paragraph("<b><u><font size=11 color=\"darkblue\">Summary plots:</font></u></b>"))
         doc_contents.append(Spacer(1, 16)) # add spacing of 16 pts
 
+        # Handle both single image and list of images
+        if not isinstance(self._summary_plots, list):
+            summary_plots = [self._summary_plots]
+        else:
+            summary_plots = self._summary_plots
+
         data = []
 
-        if len(self._summary_plots) > 2:
-            data.append([PdfImage(self._summary_plots[1], width=7.5*cm, height=7.5*cm), 
-                         PdfImage(self._summary_plots[2], width=7.5*cm, height=7.5*cm)
+        if len(summary_plots) > 2:
+            data.append([PdfImage(summary_plots[1], width=7.5*cm, height=7.5*cm), 
+                         PdfImage(summary_plots[2], width=7.5*cm, height=7.5*cm)
                         ])
-            data.append([PdfImage(self._summary_plots[0], width=7.5*cm, height=7.5*cm)])
-
+            data.append([PdfImage(summary_plots[0], width=7.5*cm, height=7.5*cm)])
         else:
-            for image in self._summary_plots:
+            for image in summary_plots:
                 data.append([PdfImage(image, width=7.5*cm, height=7.5*cm)])
 
         doc_contents.append(Table(data, colWidths=[8.0*cm, 8.0*cm], hAlign="CENTER"))
@@ -485,4 +537,3 @@ class CatPhanReport(BaseReport):
         self.add_signature(doc_contents)
 
         document.build(doc_contents, onFirstPage=self.add_metadata)
-
