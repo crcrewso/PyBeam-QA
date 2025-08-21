@@ -209,6 +209,10 @@ class Ui_MainWindow(object):
 "\n"
 "QFrame#picketFence:hover {\n"
 "	background-color: rgba(82, 142, 122,50);\n"
+"}\n"
+"\n"
+"QFrame#catphanAnalysis:hover {\n"
+"	background-color: rgba(82, 142, 122,50);\n"
 "}")
         self.testListFrame.setFrameShape(QFrame.NoFrame)
         self.testListFrame.setFrameShadow(QFrame.Raised)
@@ -478,6 +482,43 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_5.addWidget(self.fieldAnalysis)
+
+        self.catphanAnalysis = QFrame(self.testListFrame)
+        self.catphanAnalysis.setObjectName(u"catphanAnalysis")
+        sizePolicy5.setHeightForWidth(self.catphanAnalysis.sizePolicy().hasHeightForWidth())
+        self.catphanAnalysis.setSizePolicy(sizePolicy5)
+        self.catphanAnalysis.setFrameShape(QFrame.NoFrame)
+        self.catphanAnalysis.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_22 = QHBoxLayout(self.catphanAnalysis)
+        self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
+        self.horizontalLayout_22.setContentsMargins(9, 9, 9, 9)
+        
+        self.catphanAnalysisIcon = QLabel(self.catphanAnalysis)
+        self.catphanAnalysisIcon.setObjectName(u"catphanAnalysisIcon")
+        sizePolicy2.setHeightForWidth(self.catphanAnalysisIcon.sizePolicy().hasHeightForWidth())
+        self.catphanAnalysisIcon.setSizePolicy(sizePolicy2)
+        self.catphanAnalysisIcon.setMaximumSize(QSize(32, 32))
+        self.catphanAnalysisIcon.setPixmap(QPixmap(u":/colorIcons/icons/module.png"))
+        self.catphanAnalysisIcon.setScaledContents(True)
+        
+        self.horizontalLayout_22.addWidget(self.catphanAnalysisIcon, 0, Qt.AlignLeft|Qt.AlignVCenter)
+        
+        self.catphanAnalysisLabel = QLabel(self.catphanAnalysis)
+        self.catphanAnalysisLabel.setObjectName(u"catphanAnalysisLabel")
+        sizePolicy.setHeightForWidth(self.catphanAnalysisLabel.sizePolicy().hasHeightForWidth())
+        self.catphanAnalysisLabel.setSizePolicy(sizePolicy)
+        self.catphanAnalysisLabel.setMinimumSize(QSize(0, 48))
+        self.catphanAnalysisLabel.setStyleSheet(u"border-bottom-color: rgb(82, 142, 122);\n"
+                                            "border-bottom-width: 1px;\n"
+                                            "border-style: solid;")
+        self.catphanAnalysisLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
+        self.catphanAnalysisLabel.setWordWrap(False)
+        self.catphanAnalysisLabel.setMargin(0)
+        
+        self.horizontalLayout_22.addWidget(self.catphanAnalysisLabel)
+        
+        
+        self.verticalLayout_5.addWidget(self.catphanAnalysis)
 
 
         self.verticalLayout_7.addLayout(self.verticalLayout_5)
@@ -878,6 +919,8 @@ class Ui_MainWindow(object):
         self.starhshotLabel.setText(QCoreApplication.translate("MainWindow", u"Star-shot analysis", None))
         self.fieldAnalysisIcon.setText("")
         self.fieldAnalysisLabel.setText(QCoreApplication.translate("MainWindow", u"Field analysis", None))
+        self.catphanAnalysisIcon.setText("")
+        self.catphanAnalysisLabel.setText(QCoreApplication.translate("MainWindow", u"CatPhan CT analysis", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"No content here!", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"No content here!", None))
 #if QT_CONFIG(tooltip)
@@ -901,4 +944,3 @@ class Ui_MainWindow(object):
         self.loadQABtn.setText(QCoreApplication.translate("MainWindow", u"Load QA file", None))
         pass
     # retranslateUi
-
