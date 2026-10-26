@@ -985,3 +985,118 @@ class PdfImage(Flowable):
         else:
             canv.drawImage(img, x, y, self.img_width, self.img_height)
         canv.restoreState()
+
+
+class CatPhanReport(BaseReport):
+    """
+    Class for generating CatPhan (CT/CBCT) reports. Reads only the PyBeam result model
+    (core.results.catphan.CatPhanResult) and the worker's record of how the analysis was run.
+    """
+    def __init__(
+        self, filename: str,
+        report_name: str = "CatPhan Analysis Report",
+        author: str = "N/A",
+        institution: str = "N/A",
+        treatment_unit_name: str | None = None,
+        analysis_date: str | None = None,
+        report_status: str = "N/A",
+        analysis_data: dict | None = None,
+        comments: str | None = None
+        ):
+        super().__init__(filename, report_name)
+
+        self._author = author
+        self._institution = institution
+        self._treatment_unit_name = treatment_unit_name
+        self._analysis_date = analysis_date
+        self._report_status = report_status
+        self._comments = comments
+        self._analysis_data = analysis_data
+        self._result = analysis_data["result"]
+
+    _table_style = [('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+                    ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+                    ('LINEABOVE', (0,0), (-1,0), 1, colors.black),
+                    ('LINEABOVE', (0,1), (-1,1), 1, colors.black)]
+
+    def _heading(self, doc_contents: list, text: str):
+        doc_contents.append(Spacer(1, 16))
+        doc_contents.append(Paragraph(f"<b><u><font size=11 color=\"darkblue\">{text}</font></u></b>"))
+        doc_contents.append(Spacer(1, 10))
+
+    def set_user_details(self, doc_contents: list):
+        failed = ", ".join(c.name for c in self._result.failed_checks)
+        outcome = f": {self._report_status}" + (f" ({failed})" if failed else "")
+        data = [[Paragraph("<b>Physicist</b>"), f": {self._author}"],
+                [Paragraph("<b>Institution</b>"), f": {self._institution}"],
+                [Paragraph("<b>Treatment unit</b>"), f": {self._treatment_unit_name}"],
+                [Paragraph("<b>Analysis date</b>"), f": {self._analysis_date}"],
+                [Paragraph("<b>Phantom</b>"), f": CatPhan {self._result.phantom_model}"],
+                [Paragraph("<b>Test outcome</b>"), outcome]]
+
+        doc_contents.append(Table(data, colWidths=[3.5*cm, 12.0*cm], hAlign="LEFT",
+                                  style=[('LEFTPADDING', (0,0), (0,-1), 0)]))
+
+    def set_analysis_details(self, doc_contents: list):
+        r = self._result
+        self._heading(doc_contents, "Checks:")
+        data = [[Paragraph("<b>Criterion</b>"), Paragraph("<b>Result</b>"), Paragraph("<b>Detail</b>")]]
+        data += [[c.name, "PASS" if c.passed else "FAIL", Paragraph(c.detail)] for c in r.checks]
+        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.0*cm, 10.0*cm], hAlign="LEFT", style=self._table_style))
+
+        self._heading(doc_contents, f"HU linearity (tolerance ±{r.hu_tolerance:g} HU):")
+        data = [[Paragraph(f"<b>{h}</b>") for h in ("Material", "Nominal", "Measured", "Difference", "Result")]]
+        data += [[m.name, f"{m.nominal_hu:.0f}", f"{m.measured_hu:.1f}", f"{m.difference_hu:+.1f}",
+                  "PASS" if m.passed else "FAIL"] for m in r.hu_materials]
+        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.5*cm, 2.5*cm, 2.5*cm, 2.0*cm], hAlign="LEFT",
+                                  style=self._table_style))
+
+        self._heading(doc_contents, "Other measurements:")
+        data = [[Paragraph("<b>Quantity</b>"), Paragraph("<b>Value</b>")],
+                ["Phantom roll", f"{r.roll_deg:.2f}°"],
+                ["Origin slice", f"{r.origin_slice} (of {r.num_images} images)"],
+                ["Uniformity index", f"{r.uniformity_index:.2f}"],
+                ["Integral non-uniformity", f"{r.integral_non_uniformity:.4f}"],
+                ["Mean node distance (geometry)", f"{r.geometry_avg_line_distance_mm:.2f} mm"],
+                ["Slice thickness", f"{r.slice_thickness_mm:.2f} mm"]]
+        data += [[f"MTF {p} %", f"{r.mtf(p):.3f} lp/mm"] for p in (50, 30, 10) if r.mtf(p) is not None]
+        if r.low_contrast_available:
+            data.append(["Low-contrast ROIs seen", f"{r.low_contrast_rois_seen} (required {r.low_contrast_required})"])
+        doc_contents.append(Table(data, colWidths=[6.0*cm, 6.0*cm], hAlign="LEFT", style=self._table_style))
+
+    def set_plot_summary(self, doc_contents: list):
+        doc_contents.append(PageBreak())
+        self._heading(doc_contents, "Analysed images:")
+        image = PdfImage(self._analysis_data["report_plots"][0])
+        scale = 16.0*cm / image.img_width       # fit the page width, keep the figure's aspect ratio
+        image.img_width, image.img_height = 16.0*cm, image.img_height * scale
+        doc_contents.append(image)
+
+    def set_analysis_record(self, doc_contents: list):
+        """How the result was produced, so it can be reproduced later (docs/results-stability.md)."""
+        from core import __version__ as pybeam_version
+        params = self._analysis_data.get("parameters", {})
+        self._heading(doc_contents, "Analysis record:")
+        data = [["PyBeam QA version", pybeam_version],
+                ["pylinac version", self._analysis_data.get("pylinac_version", self._result.pylinac_version)],
+                ["Result schema", str(self._result.schema_version)],
+                ["Input", Paragraph(Path(self._analysis_data.get("source", "")).name or "N/A")],
+                ["Input SHA-256", Paragraph(f"<font size=7>{self._analysis_data.get('input_sha256', 'N/A')}</font>")],
+                ["Parameters", Paragraph("<font size=8>" + ", ".join(f"{k} = {v}" for k, v in params.items()) + "</font>")]]
+        doc_contents.append(Table(data, colWidths=[4.0*cm, 12.0*cm], hAlign="LEFT",
+                                  style=[('GRID', (0,0), (-1,-1), 0.5, colors.grey), ('VALIGN', (0,0), (-1,-1), 'TOP')]))
+
+    def save_report(self):
+        document = SimpleDocTemplate(self._filename)
+        doc_contents = [Spacer(1, 2.0*cm)]
+
+        self.set_user_details(doc_contents)
+        self.set_analysis_details(doc_contents)
+        self.add_comments(doc_contents)
+        self.add_signature(doc_contents)
+
+        if self._analysis_data.get("report_plots"):
+            self.set_plot_summary(doc_contents)
+        self.set_analysis_record(doc_contents)
+
+        document.build(doc_contents, onFirstPage=self.add_metadata)

@@ -1,0 +1,222 @@
+{
+ "catphan_model": "503",
+ "catphan_roll_deg": -1.1371515375864476,
+ "ctp404": {
+  "avg_line_distance_mm": 50.204041171335845,
+  "geometry_passed": true,
+  "hu_linearity_passed": false,
+  "hu_rois": {
+   "Acrylic": {
+    "difference": 395.0,
+    "name": "Acrylic",
+    "nominal_value": 115.0,
+    "passed": false,
+    "stdev": 7.798372461147366,
+    "value": 510.0
+   },
+   "Air": {
+    "difference": 638.0,
+    "name": "Air",
+    "nominal_value": -1000.0,
+    "passed": false,
+    "stdev": 23.293145874243624,
+    "value": -362.0
+   },
+   "Delrin": {
+    "difference": 321.0,
+    "name": "Delrin",
+    "nominal_value": 365.0,
+    "passed": false,
+    "stdev": 12.334752953659674,
+    "value": 686.0
+   },
+   "LDPE": {
+    "difference": 413.0,
+    "name": "LDPE",
+    "nominal_value": -104.0,
+    "passed": false,
+    "stdev": 8.767972613438069,
+    "value": 309.0
+   },
+   "PMP": {
+    "difference": 438.0,
+    "name": "PMP",
+    "nominal_value": -196.0,
+    "passed": false,
+    "stdev": 11.019117032273511,
+    "value": 242.0
+   },
+   "Poly": {
+    "difference": 415.0,
+    "name": "Poly",
+    "nominal_value": -47.0,
+    "passed": false,
+    "stdev": 8.203234850307124,
+    "value": 368.0
+   },
+   "Teflon": {
+    "difference": 130.0,
+    "name": "Teflon",
+    "nominal_value": 1000.0,
+    "passed": false,
+    "stdev": 18.63571820657289,
+    "value": 1130.0
+   }
+  },
+  "hu_tolerance": 40.0,
+  "line_distances_mm": [
+   50.11150057088626,
+   50.10115369585475,
+   50.17284158112367,
+   50.43066883747871
+  ],
+  "low_contrast_visibility": 6.952952537530281,
+  "measured_slice_thickness_mm": 0.9382683566921338,
+  "offset": 0,
+  "thickness_num_slices_combined": 1,
+  "thickness_passed": true
+ },
+ "ctp486": {
+  "integral_non_uniformity": 0.010101010101010102,
+  "nps_avg_power": 0.09635331226433348,
+  "nps_max_freq": 0.06666666666666667,
+  "passed": false,
+  "rois": {
+   "Bottom": {
+    "difference": 395.0,
+    "name": "Bottom",
+    "nominal_value": 0.0,
+    "passed": false,
+    "stdev": 6.485884368557684,
+    "value": 395.0
+   },
+   "Center": {
+    "difference": 373.0,
+    "name": "Center",
+    "nominal_value": 0.0,
+    "passed": false,
+    "stdev": 29.652156592099836,
+    "value": 373.0
+   },
+   "Left": {
+    "difference": 372.0,
+    "name": "Left",
+    "nominal_value": 0.0,
+    "passed": false,
+    "stdev": 6.500292839886768,
+    "value": 372.0
+   },
+   "Right": {
+    "difference": 400.0,
+    "name": "Right",
+    "nominal_value": 0.0,
+    "passed": false,
+    "stdev": 6.41363052111471,
+    "value": 400.0
+   },
+   "Top": {
+    "difference": 380.0,
+    "name": "Top",
+    "nominal_value": 0.0,
+    "passed": false,
+    "stdev": 6.819522599083483,
+    "value": 380.0
+   }
+  },
+  "uniformity_index": 1.9664967225054626
+ },
+ "ctp515": null,
+ "ctp528": {
+  "mtf_lp_mm": {
+   "10": null,
+   "20": null,
+   "30": null,
+   "40": null,
+   "50": null,
+   "60": null,
+   "70": 0.1815423727731592,
+   "80": 0.1543615818487728,
+   "90": 0.1271807909243864
+  },
+  "roi_settings": {
+   "region 1": {
+    "end": 0.107,
+    "gap size (cm)": 0.5,
+    "lp/mm": 0.1,
+    "num peaks": 2,
+    "num valleys": 1,
+    "peak spacing": 0.021,
+    "start": 0
+   },
+   "region 2": {
+    "end": 0.173,
+    "gap size (cm)": 0.25,
+    "lp/mm": 0.2,
+    "num peaks": 3,
+    "num valleys": 2,
+    "peak spacing": 0.01,
+    "start": 0.107
+   },
+   "region 3": {
+    "end": 0.236,
+    "gap size (cm)": 0.167,
+    "lp/mm": 0.3,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.006,
+    "start": 0.173
+   },
+   "region 4": {
+    "end": 0.286,
+    "gap size (cm)": 0.125,
+    "lp/mm": 0.4,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.00557,
+    "start": 0.236
+   },
+   "region 5": {
+    "end": 0.335,
+    "gap size (cm)": 0.1,
+    "lp/mm": 0.5,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.004777,
+    "start": 0.286
+   },
+   "region 6": {
+    "end": 0.387,
+    "gap size (cm)": 0.083,
+    "lp/mm": 0.6,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.00398,
+    "start": 0.335
+   },
+   "region 7": {
+    "end": 0.434,
+    "gap size (cm)": 0.071,
+    "lp/mm": 0.7,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.00358,
+    "start": 0.387
+   },
+   "region 8": {
+    "end": 0.479,
+    "gap size (cm)": 0.063,
+    "lp/mm": 0.8,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.0027866,
+    "start": 0.434
+   }
+  },
+  "start_angle_radians": 0.0
+ },
+ "date_of_analysis": "2026-10-26T00:00:00",
+ "num_images": 264,
+ "origin_slice": 189,
+ "pylinac_version": "3.49.0",
+ "warnings": []
+}

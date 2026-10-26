@@ -18,6 +18,10 @@ The program is still in early development and may contain bugs. Tools are flagge
 | Star-shot analysis | Complete |
 | Field analysis | Complete |
 | Planar imaging analysis | Complete |
+| CatPhan CT/CBCT analysis (503, 504, 600, 604, 700) | In-progress |
+
+Developer documentation (adding pylinac tests, GUI testing, keeping results stable across pylinac versions) is in
+[`docs/`](docs/README.md); the GUI and unit tests are in [`tests/`](tests/gui/README.md).
 
 The program includes some of these complementary features:
 
