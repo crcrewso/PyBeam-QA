@@ -106,11 +106,11 @@ def test_machine_log_gamma_matches_pylinac():
 # --- the results-stability architecture (docs/results-stability.md) -------------------------------------------------
 
 @planned
-def test_decision_module_boundaries():
-    """Once core/decision.py exists: a value exactly at tolerance follows the stated inclusive/exclusive rule; values
-    are decided at the stated resolution (1.008 mm with a 0.01 mm resolution and 1.0 mm tolerance is FAIL, 1.004 is
-    PASS); values within one measurement step of the tolerance are flagged borderline; the worksheet shows the
-    decision module's outcome rather than computing its own."""
+def test_remaining_tools_decide_through_the_decision_module():
+    """core/decision.py decides CatPhan and Winston-Lutz (tests/unit/test_decision.py). Starshot, Picket Fence and Field
+    Analysis still compare with a strict < in set_analysis_outcome. For each: add its criteria to core/criteria.py
+    (resolution and borderline band, with the reason), plant a known answer at exactly the tolerance and one pixel
+    either side, and check that the worksheet shows PASS (borderline) / FAIL (borderline) / PASS / FAIL accordingly."""
 
 
 @planned

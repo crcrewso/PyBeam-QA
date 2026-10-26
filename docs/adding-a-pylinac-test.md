@@ -190,9 +190,12 @@ Three lessons from the existing code:
    classes create pyqtgraph items there; keep new tests' pyqtgraph work on the GUI side.
 2. **Connect bound methods, not lambdas.** Several worksheets use `connect(lambda data: self.show_...(data))`. A
    bound method guarantees the call is queued onto the GUI thread.
-3. **Decide PASS/FAIL in one place, on raw values.** The worksheets compare values to tolerances in the UI
-   (`set_analysis_outcome`). See [`results-stability.md`](results-stability.md) for why pass/fail should move into
-   core code.
+3. **Decide PASS/FAIL in one place, on raw values.** On `main`, the worksheets compare values with tolerances in the
+   UI (`set_analysis_outcome`); see [`results-stability.md`](results-stability.md) for why that should move into
+   core code. On `integ/docs-catphan-ci` it has moved for CatPhan and Winston-Lutz. For a new tool:
+   - add its criteria to `core/criteria.py`, stating each resolution and borderline band and why;
+   - decide with `Criterion.decide()` (`core/decision.py`), in the result model or core code;
+   - show `Decision.outcome` ("PASS", "PASS (borderline)", …) in the worksheet and the report.
 
 ### 2.5 Results display
 
@@ -305,7 +308,7 @@ architecture as its first user. **Measured** (pylinac 3.49.0, PySide6 6.7.0, pyl
 | 2. Worksheet `.ui` | `ui/qt_ui/catphan_worksheet.ui`: Starshot's layout and object names, with a configuration form for pylinac's `analyze()` parameters (phantom, HU/scaling/thickness tolerances, low-contrast ROIs required, CNR threshold, contrast method, visibility threshold, origin slice). Listed in `pyBeamQA.pyproject` |
 | 3. Regenerate | `convertUI.sh` under PySide6 6.7.0 on Linux; `icons_rc.py` reverted |
 | 4. Core | `core/analysis/catphan.py`. **The worker only stores its arguments**; loading the series (zip or folder), analysing it and drawing pylinac's figure all happen inside `analyze()`'s `try`, so every failure reaches the worksheet as `analysis_failed` |
-| 4b. Result model | `core/results/catphan.py`: `from_pylinac()` is the only code that knows pylinac's result shape. It fails with a `ResultShapeError` naming the missing path. **PASS/FAIL is decided here** (HU linearity, geometry, slice thickness, uniformity, and low contrast when the phantom has it); MTF is reported, not judged |
+| 4b. Result model | `core/results/catphan.py`: `from_pylinac()` is the only code that knows pylinac's result shape. It fails with a `ResultShapeError` naming the missing path. **PASS/FAIL is decided here** (HU linearity, geometry, slice thickness, uniformity, and low contrast when the phantom has it) by `core/decision.py` with the criteria in `core/criteria.py`, including the borderline flag; pylinac's own flags are kept for comparison. MTF is reported, not judged |
 | 5. Window and worksheet | `ui/linac_qa/catphan_widgets.py`. Series are added as .zip files or folders (`add_files(files)`, `add_folder(folder)`). Results show as a summary, an HU table with failing materials highlighted, the checks with their reasons, and pylinac's analysed-image figure. **COMPLETE/FAILED is published from `QThread.finished`**, so nothing reacting to it can destroy a running thread |
 | 6. Register | the four edits in `ui/app_main_win.py` (`catphan_analysis`) |
 | 7. Report | `CatPhanReport` in `core/tools/report.py`: checks, HU table, other measurements, the figure, and an **analysis record** (PyBeam and pylinac versions, result schema, input name and SHA-256, every parameter) |

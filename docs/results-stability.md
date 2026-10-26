@@ -81,7 +81,9 @@ or pydantic model with an explicit `schema_version` and **full-precision** value
 
 ### 2. One decision module, on raw values, with an explicit resolution
 
-Today each worksheet's `set_analysis_outcome` compares a value with the tolerance spin-box in UI code. The boundary
+*Implemented for CatPhan and Winston-Lutz; see "Where this stands" at the end.*
+
+On `main`, each worksheet's `set_analysis_outcome` compares a value with the tolerance spin-box in UI code. The boundary
 rule is implicit: Winston-Lutz, Starshot and Picket Fence all use a strict `<`, so a value exactly at the tolerance
 FAILs, and nothing says so on screen. Proposal: a single `core/decision.py`:
 
@@ -212,13 +214,38 @@ In order of value for the effort:
    the UI.
 5. Freeze a reference image set.
 
-**Started on this branch with CatPhan** (see [`adding-a-pylinac-test.md`](adding-a-pylinac-test.md) §4.1), the first
-tool built this way:
+## Where this stands (branch `integ/docs-catphan-ci`)
 
-- `core/results/catphan.py` is its result model (item 4): `from_pylinac` is the only reader of pylinac's result
-  shape, it raises `ResultShapeError` with the missing path, and `tests/unit/test_catphan_results.py` tests it against
-  stored `results_data` from pylinac 3.49.0. Store a new sample per pylinac version.
-- The model decides PASS/FAIL and keeps full precision; the worksheet and the report only round for display. It does
-  not yet have the stated resolutions or the borderline flag of item 2.
-- Its PDF report ends with an analysis record (item 1's provenance): PyBeam QA and pylinac versions, the result
-  schema version, the input's name and SHA-256, and every analysis parameter.
+**Item 1, pinning: done.** `requirements.txt` is an exact, cross-platform lock of the set the tests pass with,
+compiled from `requirements.in` (pylinac 3.49.0, PySide6 6.7.0, Python 3.12).
+
+**Item 2, the decision module: done for CatPhan and Winston-Lutz.** The other tools are not converted yet:
+Starshot, Picket Fence and Field Analysis still decide in UI code with a strict `<`.
+- `core/decision.py` is the mechanism. It rounds to the criterion's resolution, half away from zero, in decimal
+  arithmetic, and compares. A value equal to the tolerance passes, for every criterion. A value within one measurement
+  step of the tolerance is borderline, shown as "PASS (borderline)" or "FAIL (borderline)".
+- `core/criteria.py` is the policy, in one table to review: each test's resolution and measurement step, and why.
+  - Winston-Lutz: 0.01 mm; borderline within one pixel at isocentre.
+  - CatPhan HU and uniformity: 1 HU.
+  - CatPhan geometry and slice thickness: 0.01 mm.
+  - CatPhan low contrast: a count, with no borderline band.
+- It differs from the sketch above in one respect. A `Decision` carries `passed` and `borderline` (and the value as
+  decided) rather than a four-valued enum.
+- **What changes for users:**
+  - The pixel-snapped 1.008 mm Winston-Lutz result now reads **FAIL (borderline)**, not a bare FAIL.
+  - A result of exactly the tolerance now passes, where it failed before.
+  - pylinac itself uses a strict `<` for CatPhan geometry and slice thickness, so PyBeam QA can pass a value exactly
+    at those tolerances that pylinac fails.
+  - The CatPhan result keeps pylinac's flags (`pylinac_flags`) and lists any disagreement. The tests require none on
+    the demo series.
+
+**Item 4, result models: CatPhan only.** `core/results/catphan.py` (schema 2) is the only reader of pylinac's
+CatPhan result shape. It raises `ResultShapeError` with the missing path, and `tests/unit/test_catphan_results.py`
+tests it against stored `results_data` from pylinac 3.49.0. Store a new sample per pylinac version.
+
+**Provenance (item 1's report record): CatPhan only.** Its PDF report ends with an analysis record:
+- PyBeam QA and pylinac versions;
+- the result schema;
+- the input's name and SHA-256;
+- every parameter;
+- the decision rules.

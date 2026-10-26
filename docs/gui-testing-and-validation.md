@@ -165,7 +165,7 @@ PyBeam errors.
 | The Field Analysis "interpolation resolution" setting has no effect: the worksheet never passes it to the worker | bug, **fixed** on `integ/docs-catphan-ci` | `field_analysis_widgets.py` `start_analysis`; `test_parity.py` |
 | Every other Field Analysis setting reaches pylinac correctly (protocol, centring, edge method, normalisation, interpolation, in-field ratio, slope exclusion) | parity | `test_parity.py` |
 | PyBeam's `QWinstonLutz` override of `analyze()` gives exactly pylinac's numbers for a gantry-only set | parity | `test_parity.py` |
-| A Winston-Lutz result of 1.01 mm FAILs against a 1.0 mm tolerance (strict `<`) | design, see `results-stability.md` | `set_analysis_outcome` |
+| A Winston-Lutz result of 1.01 mm FAILs against a 1.0 mm tolerance (strict `<`) | design. On `integ/docs-catphan-ci`, decided by `core/decision.py`: **FAIL (borderline)**, and a value equal to the tolerance passes | `set_analysis_outcome`; `test_known_answers.py` |
 | Field Analysis `add_files()` cannot take paths; the others can | testability | `field_analysis_widgets.py:240` |
 
 And in the two unmerged CatPhan branches, see `adding-a-pylinac-test.md` §4:

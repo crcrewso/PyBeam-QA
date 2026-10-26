@@ -56,16 +56,17 @@ def test_catphan604_hu_tolerance_setting_is_honoured(qtbot):
 @pytest.mark.parametrize("zip_name, phantom", [("CatPhan503.zip", "CatPhan 503"), ("CatPhan600.zip", "CatPhan 600"),
                                                ("CatPhan604.zip", "CatPhan 604")])
 def test_catphan_matches_pylinac(qtbot, zip_name, phantom):
-    from core.analysis.catphan import PHANTOMS
-    from core.results.catphan import from_pylinac
+    from core.analysis.catphan import PHANTOMS, result_from
     source = demo(zip_name)
     _, ws = run_catphan(qtbot, source, phantom)
     assert ws.analysis_state == AnalysisInfoLabel.COMPLETE, ws.analysis_message
     params = ws.analysis_parameters()
     direct = PHANTOMS[phantom].from_zip(str(source))
     direct.analyze(**params, origin_slice=ws.origin_slice())
-    expected = from_pylinac(direct.results_data(as_dict=True), low_contrast_required=params["low_contrast_tolerance"])
+    expected = result_from(direct, params)
     assert ws.analysis_data["result"] == expected
+    assert expected.disagreements_with_pylinac == ()   # no demo value sits at a tolerance
+    assert ws.ui.outcomeLE.text() == expected.outcome
 
 
 # --- input forms and failure paths ------------------------------------------------------------------------------

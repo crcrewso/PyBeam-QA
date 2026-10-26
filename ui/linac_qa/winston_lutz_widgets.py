@@ -31,7 +31,9 @@ from ui.util_widgets import worksheet_save_report
 from ui.util_widgets.dialogs import MessageDialog
 from ui.linac_qa.winston_lutz_test_dialog import WLTestDialog
 
+from core import criteria
 from core.analysis.wlutz import QWinstonLutzWorker, generate_winstonlutz
+from core.decision import Decision
 from core.tools.report import WinstonLutzReport
 from core.tools.devices import DeviceManager
 
@@ -56,6 +58,13 @@ import subprocess
 import webbrowser
 
 pg.setConfigOptions(antialias=True, imageAxisOrder='row-major')
+
+
+def wl_decision(distance_mm: float, tolerance_mm: float, pixel_size_mm: float | None = None) -> Decision:
+    """PASS/FAIL for a CAX-to-BB distance, by core/decision.py: decided at 0.01 mm, the tolerance itself passing, and
+    borderline within one pixel at isocentre (core/criteria.py)."""
+    return criteria.winston_lutz(tolerance_mm).decide(distance_mm, step=pixel_size_mm)
+
 
 class WinstonLutzMainWindow(QAToolsWindow):
     
@@ -567,25 +576,22 @@ class QWLutzWorksheet(QWidget):
                 "padding-left: 15px;\n"
                 "height: 30px;\n"
                 "font-weight: bold;\n")
-            
-        elif self.maxLocError < self.ui.toleranceDSB.value():
-            self.ui.outcomeLE.setText("PASS")
-            self.ui.outcomeLE.setStyleSheet(u"border-color: rgb(95, 200, 26);\n"
-                "border-radius: 15px;\n"
-                "border-style: solid;\n"
-                "border-width: 2px;\n"
-                "background-color: rgba(95, 200, 26, 150);\n"
-                "padding-left: 15px;\n"
-                "height: 30px;\n"
-                "font-weight: bold;\n")
-            
+
         else:
-            self.ui.outcomeLE.setText("FAIL")
-            self.ui.outcomeLE.setStyleSheet(u"border-color: rgb(231, 29, 14);\n"
+            # decided by core/decision.py; borderline within one pixel at isocentre (the largest of the images)
+            pixel_mm = max((d.get("pixel_size_mm") or 0 for d in self.current_results["image_details"]), default=0)
+            decision = wl_decision(self.maxLocError, self.ui.toleranceDSB.value(), pixel_mm or None)
+            colour = "95, 200, 26" if decision.passed else "231, 29, 14"
+            border = "rgb(240, 170, 0)" if decision.borderline else f"rgb({colour})"
+            self.ui.outcomeLE.setText(decision.outcome)
+            self.ui.outcomeLE.setToolTip(f"Max 2D CAX to BB {decision.describe()}"
+                                         + (f"\nBorderline: within one pixel at isocentre ({decision.step:.2f} mm) "
+                                            "of the tolerance" if decision.borderline else ""))
+            self.ui.outcomeLE.setStyleSheet(f"border-color: {border};\n"
                 "border-radius: 15px;\n"
                 "border-style: solid;\n"
                 "border-width: 2px;\n"
-                "background-color: rgba(231, 29, 14, 150);\n"
+                f"background-color: rgba({colour}, 150);\n"
                 "padding-left: 15px;\n"
                 "height: 30px;\n"
                 "font-weight: bold;\n")
@@ -892,13 +898,9 @@ class AdvancedWLView(QMainWindow):
             delta_v_item = QTableWidgetItem(result["delta_v"])
             cax_2_bb_item = QTableWidgetItem(f"{result['cax_to_bb_dist']:.2f}")
 
-            if result["cax_to_bb_dist"] < tolerance:
-                outcome_item = QTableWidgetItem("PASS")
-                outcome_item.setBackground(QColor(95, 200, 26))
-
-            else:
-                outcome_item = QTableWidgetItem("FAIL")
-                outcome_item.setBackground(QColor(231, 29, 14))
+            decision = wl_decision(result["cax_to_bb_dist"], tolerance, result.get("pixel_size_mm"))
+            outcome_item = QTableWidgetItem(decision.outcome)
+            outcome_item.setBackground(QColor(95, 200, 26) if decision.passed else QColor(231, 29, 14))
 
             filename_item.setFlags(filename_item.flags() ^ Qt.ItemFlag.ItemIsEditable)
             gantry_angle_item.setFlags(gantry_angle_item.flags() ^ Qt.ItemFlag.ItemIsEditable)
@@ -993,12 +995,9 @@ class AnalysedImageViewer(QMainWindow):
     def set_plot_info(self):
         image_data = self.list_item.data(Qt.UserRole)["analysis_data"]
 
-        if image_data["cax_to_bb_dist"] < self.tolerance:
-            color = "green"
-            status = "Pass"
-        else:
-            color = "red"
-            status = "Fail"
+        decision = wl_decision(image_data["cax_to_bb_dist"], self.tolerance, image_data.get("pixel_size_mm"))
+        color = "green" if decision.passed else "red"
+        status = decision.outcome.capitalize()
 
         # Set plot info
         self.plot_info.setText(f"<p><b>Outcome:<span style='color:{color}'> {status}</span></b></p>"\

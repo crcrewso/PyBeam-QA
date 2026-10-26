@@ -109,6 +109,7 @@ class QWinstonLutz(WinstonLutz):
                 "epid": {"x": img.epid.x, "y": img.epid.y},
                 "cax_to_bb_dist": img.cax2bb_distance,
                 "cax_to_epid_dist": img.cax2epid_distance,
+                "pixel_size_mm": 1 / img.dpmm,  # at isocentre: the borderline band of the decision (core/criteria.py)
                 "gantry_angle": f"{img.gantry_angle:.2f}",
                 "collimator_angle": f"{img.collimator_angle:.2f}",
                 "couch_angle": f"{img.couch_angle:.2f}",

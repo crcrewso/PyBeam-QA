@@ -50,9 +50,15 @@ DEFAULT_PHANTOM = "CatPhan 504"
 _OUTCOME_STYLE = ("border-color: {border};\nborder-radius: 15px;\nborder-style: solid;\nborder-width: 2px;\n"
                   "background-color: {background};\npadding-left: 15px;\nheight: 30px;\nfont-weight: bold;\n")
 NEUTRAL_STYLE = _OUTCOME_STYLE.format(border="rgba(0, 0, 0, 0)", background="rgba(0, 0, 0, 0)")
-PASS_STYLE = _OUTCOME_STYLE.format(border="rgb(95, 200, 26)", background="rgba(95, 200, 26, 150)")
-FAIL_STYLE = _OUTCOME_STYLE.format(border="rgb(231, 29, 14)", background="rgba(231, 29, 14, 150)")
 FAIL_BRUSH = QBrush(QColor(231, 29, 14, 60))
+BORDERLINE_BRUSH = QBrush(QColor(240, 170, 0, 60))
+
+
+def outcome_style(passed: bool, borderline: bool) -> str:
+    """Green for PASS, red for FAIL; a borderline outcome keeps its colour and gets an amber border."""
+    colour = "95, 200, 26" if passed else "231, 29, 14"
+    return _OUTCOME_STYLE.format(border="rgb(240, 170, 0)" if borderline else f"rgb({colour})",
+                                 background=f"rgba({colour}, 150)")
 
 
 class CatPhanMainWindow(QAToolsWindow):
@@ -349,11 +355,13 @@ class QCatPhanWorksheet(QWidget):
         self.hu_table.setRowCount(len(result.hu_materials))
         for row, m in enumerate(result.hu_materials):
             cells = [m.name, f"{m.nominal_hu:.0f}", f"{m.measured_hu:.1f}", f"{m.difference_hu:+.1f}",
-                     "PASS" if m.passed else "FAIL"]
+                     m.decision.outcome]
             for col, text in enumerate(cells):
                 cell = QTableWidgetItem(text)
                 if not m.passed:
                     cell.setBackground(FAIL_BRUSH)
+                elif m.decision.borderline:
+                    cell.setBackground(BORDERLINE_BRUSH)
                 self.hu_table.setItem(row, col, cell)
         self.hu_table.resizeRowsToContents()
         rows_height = sum(self.hu_table.rowHeight(r) for r in range(self.hu_table.rowCount()))
@@ -361,7 +369,9 @@ class QCatPhanWorksheet(QWidget):
         self.hu_table.show()
 
         for check in result.checks:
-            self.checks_layout.addRow(f"{check.name}:", QLabel(f"{'PASS' if check.passed else 'FAIL'} — {check.detail}"))
+            label = QLabel(f"{check.outcome} — {check.detail}")
+            label.setToolTip("\n".join(d.describe() for d in check.decisions))
+            self.checks_layout.addRow(f"{check.name}:", label)
 
         pixmap = QPixmap()
         pixmap.loadFromData(data["analyzed_image_png"])
@@ -392,14 +402,12 @@ class QCatPhanWorksheet(QWidget):
             self.ui.outcomeLE.clear()
             self.ui.outcomeLE.setToolTip("")
             self.ui.outcomeLE.setStyleSheet(NEUTRAL_STYLE)
-        elif result.passed:
-            self.ui.outcomeLE.setText("PASS")
-            self.ui.outcomeLE.setToolTip("All checks passed")
-            self.ui.outcomeLE.setStyleSheet(PASS_STYLE)
         else:
-            self.ui.outcomeLE.setText("FAIL")
-            self.ui.outcomeLE.setToolTip("\n".join(f"{c.name}: {c.detail}" for c in result.failed_checks))
-            self.ui.outcomeLE.setStyleSheet(FAIL_STYLE)
+            self.ui.outcomeLE.setText(result.outcome)
+            noted = result.failed_checks if not result.passed else [c for c in result.checks if c.borderline]
+            self.ui.outcomeLE.setToolTip("\n".join(f"{c.name}: {c.outcome} — {c.detail}" for c in noted)
+                                         or "All checks passed")
+            self.ui.outcomeLE.setStyleSheet(outcome_style(result.passed, result.borderline))
 
     # ------------------------------------------------------------------ report
     def write_report(self, path: str, author: str = "N/A", institution: str = "N/A", treatment_unit: str = "N/A",

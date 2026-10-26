@@ -1041,14 +1041,16 @@ class CatPhanReport(BaseReport):
         r = self._result
         self._heading(doc_contents, "Checks:")
         data = [[Paragraph("<b>Criterion</b>"), Paragraph("<b>Result</b>"), Paragraph("<b>Detail</b>")]]
-        data += [[c.name, "PASS" if c.passed else "FAIL", Paragraph(c.detail)] for c in r.checks]
-        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.0*cm, 10.0*cm], hAlign="LEFT", style=self._table_style))
+        data += [[c.name, Paragraph(c.outcome), Paragraph(c.detail)] for c in r.checks]
+        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.6*cm, 9.4*cm], hAlign="LEFT", style=self._table_style))
+        doc_contents.append(Paragraph("<font size=8>Borderline: within one measurement step of the tolerance "
+                                      "(decision rules in the analysis record).</font>"))
 
         self._heading(doc_contents, f"HU linearity (tolerance ±{r.hu_tolerance:g} HU):")
         data = [[Paragraph(f"<b>{h}</b>") for h in ("Material", "Nominal", "Measured", "Difference", "Result")]]
         data += [[m.name, f"{m.nominal_hu:.0f}", f"{m.measured_hu:.1f}", f"{m.difference_hu:+.1f}",
-                  "PASS" if m.passed else "FAIL"] for m in r.hu_materials]
-        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.5*cm, 2.5*cm, 2.5*cm, 2.0*cm], hAlign="LEFT",
+                  Paragraph(m.decision.outcome)] for m in r.hu_materials]
+        doc_contents.append(Table(data, colWidths=[4.0*cm, 2.5*cm, 2.5*cm, 2.5*cm, 2.6*cm], hAlign="LEFT",
                                   style=self._table_style))
 
         self._heading(doc_contents, "Other measurements:")
@@ -1058,7 +1060,7 @@ class CatPhanReport(BaseReport):
                 ["Uniformity index", f"{r.uniformity_index:.2f}"],
                 ["Integral non-uniformity", f"{r.integral_non_uniformity:.4f}"],
                 ["Mean node distance (geometry)", f"{r.geometry_avg_line_distance_mm:.2f} mm"],
-                ["Slice thickness", f"{r.slice_thickness_mm:.2f} mm"]]
+                ["Slice thickness", f"{r.slice_thickness_mm:.2f} mm (nominal {r.nominal_slice_thickness_mm:.2f} mm)"]]
         data += [[f"MTF {p} %", f"{r.mtf(p):.3f} lp/mm"] for p in (50, 30, 10) if r.mtf(p) is not None]
         if r.low_contrast_available:
             data.append(["Low-contrast ROIs seen", f"{r.low_contrast_rois_seen} (required {r.low_contrast_required})"])
@@ -1082,7 +1084,11 @@ class CatPhanReport(BaseReport):
                 ["Result schema", str(self._result.schema_version)],
                 ["Input", Paragraph(Path(self._analysis_data.get("source", "")).name or "N/A")],
                 ["Input SHA-256", Paragraph(f"<font size=7>{self._analysis_data.get('input_sha256', 'N/A')}</font>")],
-                ["Parameters", Paragraph("<font size=8>" + ", ".join(f"{k} = {v}" for k, v in params.items()) + "</font>")]]
+                ["Parameters", Paragraph("<font size=8>" + ", ".join(f"{k} = {v}" for k, v in params.items()) + "</font>")],
+                ["Decision rules", Paragraph("<font size=8>" + "<br/>".join(
+                    f"{name}: {c.name} {c.rule}" + (f"; borderline within {c.step if c.step is not None else c.resolution:g}"
+                                                    f" {c.unit}" if c.step != 0 else "")
+                    for name, c in self._result.decision_criteria) + "</font>")]]
         doc_contents.append(Table(data, colWidths=[4.0*cm, 12.0*cm], hAlign="LEFT",
                                   style=[('GRID', (0,0), (-1,-1), 0.5, colors.grey), ('VALIGN', (0,0), (-1,-1), 'TOP')]))
 

@@ -26,7 +26,12 @@ def wl_config(bb_mm=5.0, tolerance_mm=1.0):
 
 # --- pylinac's generators -----------------------------------------------------------------------------------------
 
-@pytest.mark.parametrize("bb_left_mm, expected", [(0.0, "PASS"), (0.5, "PASS"), (1.5, "FAIL")])
+@pytest.mark.parametrize("bb_left_mm, expected", [
+    (0.0, "PASS"), (0.5, "PASS"), (1.5, "FAIL"),
+    # placed on whole pixels, 1.0 mm becomes 1.008 mm: 1.01 at the 0.01 mm decision resolution, within one pixel of
+    # the 1.0 mm tolerance, so a borderline failure (core/criteria.py)
+    (1.0, "FAIL (borderline)"),
+])
 def test_winston_lutz_reports_a_known_bb_offset(qtbot, tmp_path, bb_left_mm, expected):
     from ui.linac_qa.winston_lutz_widgets import WinstonLutzMainWindow
     win, ws = run_worksheet(qtbot, WinstonLutzMainWindow, wl_images(tmp_path, offset_mm_left=bb_left_mm), wl_config())

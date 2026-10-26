@@ -31,7 +31,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 from pylinac import CatPhan503, CatPhan504, CatPhan600, CatPhan604, CatPhan700
 from pylinac import __version__ as pylinac_version
 
-from core.results.catphan import from_pylinac
+from core.results.catphan import CatPhanResult, from_pylinac
 
 PHANTOMS = {"CatPhan 503": CatPhan503,
             "CatPhan 504": CatPhan504,
@@ -70,6 +70,15 @@ def load_catphan(phantom: str, source: str):
     raise FileNotFoundError(f"{source} is neither a .zip of a CT series nor a folder of DICOM files")
 
 
+def result_from(ct, parameters: dict) -> CatPhanResult:
+    """The decided result of an analysed pylinac CatPhan object, given the parameters it was analysed with."""
+    return from_pylinac(ct.results_data(as_dict=True),
+                        low_contrast_required=parameters["low_contrast_tolerance"],
+                        scaling_tolerance_mm=parameters["scaling_tolerance"],
+                        thickness_tolerance_mm=parameters["thickness_tolerance"],
+                        nominal_slice_thickness_mm=float(ct.ctp404.slice_thickness))
+
+
 class QCatPhanWorker(QObject):
     """Runs one CatPhan analysis on a worker thread."""
 
@@ -95,8 +104,7 @@ class QCatPhanWorker(QObject):
             self.analysis_progress.emit("Analysing CT series...")
             ct.analyze(**self._parameters, origin_slice=self._origin_slice)
 
-            result = from_pylinac(ct.results_data(as_dict=True),
-                                  low_contrast_required=self._parameters["low_contrast_tolerance"])
+            result = result_from(ct, self._parameters)
 
             self.analysis_progress.emit("Drawing figures...")
             image_png = io.BytesIO()
