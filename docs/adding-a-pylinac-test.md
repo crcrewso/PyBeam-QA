@@ -28,6 +28,7 @@ Related documents:
 | Star-shot analysis | `StarshotMainWindow` → `QStarshotWorksheet` | `core/analysis/starshot.py` | `StarshotReport` |
 | Field analysis | `FieldAnalysisMainWindow` → `QFieldAnalysisWorksheet` | `core/analysis/field_analysis.py` | `FieldAnalysisReport` |
 | Planar imaging analysis | `PlanarImagingMainWindow` → `QPlanarImagingWorksheet` | `core/analysis/planar_imaging.py` (13 phantoms) | `PlanarImagingReport` |
+| **CatPhan analysis (CT/CBCT)**, added on this branch (§4.1) | `CatPhanMainWindow` → `QCatPhanWorksheet` | `core/analysis/catphan.py` (`QCatPhanWorker`) + result model `core/results/catphan.py` | `CatPhanReport` |
 
 **Measured:** all five pylinac-backed windows open from their launcher cards headless. The two calibration cards
 switch a page inside the main window instead of opening one.
@@ -38,7 +39,7 @@ The source for this list is pylinac 3.45, the version used elsewhere on this mac
 
 | pylinac analysis | Class(es) | Input | Why it is a good next tool | Notes |
 |---|---|---|---|---|
-| **CT / CBCT phantoms** | `CatPhan503/504/600/604/700`, `QuartDVT`, `ACRCT`, `ACRMRILarge`, `CIRS062M`, `TomoCheese` | a folder or zip of a CT series | Daily/monthly CBCT QA is routine; two branches have already tried it (§4) | Demo data exists for 503/504/600/604, Quart and TomoCheese. Input is a *series*, not an image, so the worksheet differs from the others |
+| **Other CT / CBCT phantoms** | `QuartDVT`, `ACRCT`, `ACRMRILarge`, `CIRS062M`, `TomoCheese` | a folder or zip of a CT series | The CatPhan tool (§4.1) is the template: same series input, same worksheet shape | Demo data exists for Quart and TomoCheese. CatPhan itself is now implemented on this branch |
 | **VMAT** | `DRGS`, `DRMLC`, `DRCS` | exactly two EPID images (open + DMLC) | Standard Varian VMAT commissioning and QA | `analyze(tolerance=1.5)`; there is no public `save_analyzed_image` in 3.45. Plotting is `plot_analyzed_image` |
 | **Field profile analysis** | `FieldProfileAnalysis` | one image | pylinac's newer, metric-plugin field analysis; overlaps the existing Field Analysis tool | Could extend the existing tool rather than add a card |
 | **Light/radiation coincidence** | `StandardImagingFC2`, `IMTLRad`, `DoselabRLf`, `IsoAlign`, `SNCFSQA` | one image | Monthly mechanical QA | Same base class as planar imaging; easiest new card to add |
@@ -289,6 +290,38 @@ demo datasets (503, 600 and 604).
 - **CT input differs from the other tools.** pylinac's CatPhan classes take a **folder or zip of a whole series**,
   not one image. `copilot/fix-1` picks a single zip; `codegen-bot` takes a list of files or a folder. A worksheet for
   series input needs its own list item type (one item per series), and its `add_files` should accept folders and zips.
+
+### 4.1 The CatPhan tool on this branch: the checklist applied
+
+Built fresh on `main` by following §3. It borrows the four registration edits from `copilot/fix-1` and the parameter
+set and per-module results from `codegen-bot`, and adopts the [`results-stability.md`](results-stability.md)
+architecture as its first user. **Measured** (pylinac 3.49.0, PySide6 6.7.0, pylinac's public CatPhan demo series).
+
+| Step (§3) | What was done |
+|---|---|
+| 1. Launcher card | `catphanAnalysis` card and hover rule added to `ui/qt_ui/app_main_win.ui`; the regenerated `app_main_win_ui.py` changes by 42 added lines and nothing else |
+| 2. Worksheet `.ui` | `ui/qt_ui/catphan_worksheet.ui`: Starshot's layout and object names, with a configuration form for pylinac's `analyze()` parameters (phantom, HU/scaling/thickness tolerances, low-contrast ROIs required, CNR threshold, contrast method, visibility threshold, origin slice). Listed in `pyBeamQA.pyproject` |
+| 3. Regenerate | `convertUI.sh` under PySide6 6.7.0 on Linux; `icons_rc.py` reverted |
+| 4. Core | `core/analysis/catphan.py`. **The worker only stores its arguments**; loading the series (zip or folder), analysing it and drawing pylinac's figure all happen inside `analyze()`'s `try`, so every failure reaches the worksheet as `analysis_failed` |
+| 4b. Result model | `core/results/catphan.py`: `from_pylinac()` is the only code that knows pylinac's result shape. It fails with a `ResultShapeError` naming the missing path. **PASS/FAIL is decided here** (HU linearity, geometry, slice thickness, uniformity, and low contrast when the phantom has it); MTF is reported, not judged |
+| 5. Window and worksheet | `ui/linac_qa/catphan_widgets.py`. Series are added as .zip files or folders (`add_files(files)`, `add_folder(folder)`). Results show as a summary, an HU table with failing materials highlighted, the checks with their reasons, and pylinac's analysed-image figure. **COMPLETE/FAILED is published from `QThread.finished`**, so nothing reacting to it can destroy a running thread |
+| 6. Register | the four edits in `ui/app_main_win.py` (`catphan_analysis`) |
+| 7. Report | `CatPhanReport` in `core/tools/report.py`: checks, HU table, other measurements, the figure, and an **analysis record** (PyBeam and pylinac versions, result schema, input name and SHA-256, every parameter) |
+| 9. Tests | launcher row; `tests/gui/test_catphan.py` (truth, parity, folder vs zip, wrong phantom, missing input, report); `tests/unit/test_catphan_results.py` (the adapter against stored pylinac results); a baseline case |
+
+**What it reports on pylinac's demo series:**
+
+| Series, as | Outcome |
+|---|---|
+| CatPhan 604, HU tolerance 40 | **FAIL**: HU linearity; 50 % Bone +44 HU and Teflon −55 HU. Every other check passes |
+| CatPhan 604, HU tolerance 60 | **PASS** |
+| CatPhan 503 | **FAIL**: HU linearity (7 materials, from Air +638 HU to Teflon +130 HU: the demo series' numbers are offset) and uniformity (index 1.97). There is no low-contrast module on the 503; MTF at 50 % is not resolved on this series (pylinac returns no value), so it shows "n/a" |
+| CatPhan 600 | **FAIL**: HU linearity (Air +41 HU, Teflon −78 HU). MTF at 50 % shows "n/a", as on the 503 |
+| CatPhan 604 data, analysed as a 503 | **FAILED** with pylinac's reason ("the physical scan extent does not match the module configuration"), not a hang |
+
+Every displayed number equals a direct pylinac call with the worksheet's settings (parity tests for 503, 600 and 604).
+The 504 and 700 are untested: there is no cached 504 demo, and no 700 demo exists. The status in the README is
+"In-progress" until someone has run it on their own scanner's images.
 
 ---
 

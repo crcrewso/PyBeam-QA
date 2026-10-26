@@ -8,15 +8,17 @@ This guide is about checking that the GUI gives the right answers. It covers:
 - **what was found** doing so in October 2026.
 
 The runnable tests are in [`tests/gui/`](../tests/gui/README.md). Measured on a Linux VM (Ubuntu 24.04, Python 3.12,
-PySide6 6.7.0, pylinac 3.49.0, pytest-qt 4.5.0), the full suite takes about 80 s:
+PySide6 6.7.0, pylinac 3.49.0, pytest-qt 4.5.0), `pytest tests` (the GUI tests plus the CatPhan result-model unit
+tests) takes about 150 s, most of it the CatPhan series:
 
 | Outcome | Count | What they are |
 |---|---|---|
-| passed | 48 | |
+| passed | 65 | |
 | expected failures | 7 | each a known bug, kept as strict `xfail` so a fix is noticed |
 | skipped | 16 | the described stubs for planned tests |
 
-On a first run, before a baseline exists for the installed pylinac version, the 9 baseline tests skip as well.
+On a first run, before a baseline exists for the installed pylinac version, the 10 baseline tests skip as well. The
+CatPhan tests use pylinac's demo series, which pylinac downloads on first use; they skip if it cannot.
 
 ---
 

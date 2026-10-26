@@ -211,3 +211,14 @@ In order of value for the effort:
 4. Introduce result models test by test, starting with the next new tool, so that it never reads pylinac objects in
    the UI.
 5. Freeze a reference image set.
+
+**Started on this branch with CatPhan** (see [`adding-a-pylinac-test.md`](adding-a-pylinac-test.md) §4.1), the first
+tool built this way:
+
+- `core/results/catphan.py` is its result model (item 4): `from_pylinac` is the only reader of pylinac's result
+  shape, it raises `ResultShapeError` with the missing path, and `tests/unit/test_catphan_results.py` tests it against
+  stored `results_data` from pylinac 3.49.0. Store a new sample per pylinac version.
+- The model decides PASS/FAIL and keeps full precision; the worksheet and the report only round for display. It does
+  not yet have the stated resolutions or the borderline flag of item 2.
+- Its PDF report ends with an analysis record (item 1's provenance): PyBeam QA and pylinac versions, the result
+  schema version, the input's name and SHA-256, and every analysis parameter.
