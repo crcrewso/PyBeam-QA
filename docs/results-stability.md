@@ -219,6 +219,14 @@ In order of value for the effort:
 **Item 1, pinning: done.** `requirements.txt` is an exact, cross-platform lock of the set the tests pass with,
 compiled from `requirements.in` (pylinac 3.49.0, PySide6 6.7.0, Python 3.12).
 
+**Section 5's CI and canary: done.**
+- `.github/workflows/tests.yml` runs `pytest tests` on every push and pull request, on Ubuntu and Windows, from the
+  lock.
+- `.github/workflows/pylinac-canary.yml` runs the suite weekly against the newest pylinac, and uploads the drift
+  report.
+- Scheduled runs need the workflow on the default branch, so the weekly canary starts when this branch reaches `main`.
+- See `tests/gui/README.md`.
+
 **Item 2, the decision module: done for CatPhan and Winston-Lutz.** The other tools are not converted yet:
 Starshot, Picket Fence and Field Analysis still decide in UI code with a strict `<`.
 - `core/decision.py` is the mechanism. It rounds to the criterion's resolution, half away from zero, in decimal

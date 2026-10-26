@@ -22,8 +22,8 @@ needed).
 `QT_QPA_PLATFORM=offscreen` is set automatically, so no display is needed. To save screenshots:
 `PYBEAM_SHOTS=/tmp/shots pytest tests/gui`.
 
-**Expected result** of `pytest tests`, measured with pylinac 3.49.0, PySide6 6.7.0 and FauxPID 1014da2: **65 passed,
-7 xfailed, 16 skipped** (the planned-test stubs), in about 150 s. With a pylinac version that has no baseline yet,
+**Expected result** of `pytest tests`, measured with pylinac 3.49.0, PySide6 6.7.0 and FauxPID 1014da2: **97 passed,
+5 xfailed, 16 skipped** (the planned-test stubs), in about 150 s. With a pylinac version that has no baseline yet,
 the 10 baseline tests skip, or report drift against an older baseline. The CatPhan tests need pylinac's demo series
 (downloaded on first use; skipped if unavailable); the report test reads the PDF with `pypdf` if it is installed.
 
@@ -42,6 +42,15 @@ the 10 baseline tests skip, or report drift against an older baseline. The CatPh
 | `test_known_bugs.py` | strict expected failures: open PyBeam bugs (none at present) and reference-image bugs |
 | `test_planned_tools.py` | described stubs for planned tools and missing tests |
 | `requirements.txt` | the pinned test environment |
+
+## On GitHub (CI)
+
+| Workflow | Runs on | What it does |
+|---|---|---|
+| `.github/workflows/tests.yml` | every push and pull request | `pytest tests` on Ubuntu 24.04 and Windows (Server 2022), Python 3.12, from the lock, with FauxPID; pylinac's demo series are cached between runs |
+| `.github/workflows/pylinac-canary.yml` | weekly, once it is on the default branch; by hand; when the workflow changes | the same suite against the **newest** pylinac. It uploads `drift-report.json` and the installed versions, and summarises the drift on the run page. It never changes the lock |
+
+Neither workflow publishes anything or uses secrets.
 
 ## Baselines and pylinac upgrades
 

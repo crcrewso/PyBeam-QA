@@ -1,0 +1,82 @@
+# The pylinac canary (docs/results-stability.md, section 5): the test suite against the NEWEST pylinac, so that a change
+# in pylinac's results is seen before anyone upgrades. It never changes requirements.txt.
+#
+# With a pylinac version that has no stored baseline, the baseline tests compare against the newest older baseline,
+# write tests/gui/drift-report.json and are marked xfail; the report is uploaded as an artifact and summarised on the
+# run page. A failure here means the newest pylinac breaks PyBeam QA (e.g. a reshaped result: ResultShapeError).
+#
+# Scheduled runs happen only on the default branch, so the weekly run starts once this file is on main. On other
+# branches it runs when this file changes, and by hand (Actions > pylinac canary > Run workflow, once on main).
+name: pylinac canary
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"   # Mondays 06:17 UTC; pylinac releases about once a month
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/pylinac-canary.yml
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      QT_QPA_PLATFORM: offscreen
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Qt's system libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libxkbcommon0 libfontconfig1 libdbus-1-3
+
+      - name: Install the locked set, then upgrade pylinac to its newest release
+        run: |
+          python -m pip install -r tests/gui/requirements.txt
+          python -m pip install "FauxPID @ git+https://github.com/crcrewso/linac-dicom-image-suite.git@1014da2"
+          python -m pip install --upgrade pylinac
+          python -m pip freeze > installed.txt
+
+      - name: Record the versions under test
+        shell: python
+        run: |
+          import os, numpy, pylinac, scipy
+          locked = next(l.split("==")[1].strip() for l in open("requirements.txt") if l.startswith("pylinac=="))
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as s:
+              s.write(f"## pylinac canary\n\nNewest pylinac: **{pylinac.__version__}** (locked: {locked}); "
+                      f"numpy {numpy.__version__}, scipy {scipy.__version__}.\n\n")
+
+      - name: Run the tests against the newest pylinac
+        run: python -m pytest tests -q -rfEx -p no:cacheprovider
+
+      - name: Summarise the drift report
+        if: always()
+        shell: python
+        run: |
+          import json, os, pathlib
+          report = pathlib.Path("tests/gui/drift-report.json")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as s:
+              if not report.exists():
+                  s.write("No drift report: the newest pylinac has a stored baseline, or nothing drifted.\n")
+              else:
+                  s.write("### Drift beyond the review bands\n\n```json\n"
+                          + json.dumps(json.loads(report.read_text()), indent=2)[:60000] + "\n```\n")
+
+      - name: Upload the drift report and the installed versions
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pylinac-canary
+          path: |
+            tests/gui/drift-report.json
+            installed.txt
+          if-no-files-found: warn

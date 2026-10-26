@@ -13,8 +13,8 @@ tests) takes about 150 s, most of it the CatPhan series:
 
 | Outcome | Count | What they are |
 |---|---|---|
-| passed | 65 | |
-| expected failures | 7 | each a known bug, kept as strict `xfail` so a fix is noticed |
+| passed | 97 | including the decision-module unit tests |
+| expected failures | 5 | each a known bug in the reference-image suite, kept as strict `xfail` so a fix is noticed |
 | skipped | 16 | the described stubs for planned tests |
 
 On a first run, before a baseline exists for the installed pylinac version, the 10 baseline tests skip as well. The
