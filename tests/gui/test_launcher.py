@@ -9,6 +9,7 @@ TOOLS = [  # (card object name in app_main_win.ui, qa_windows key, window class 
     ("starshotAnalysis", "starshot", "StarshotMainWindow"),
     ("fieldAnalysis", "field_analysis", "FieldAnalysisMainWindow"),
     ("planarImagingAnalysis", "planar_imaging_analysis", "PlanarImagingMainWindow"),
+    ("catphanAnalysis", "catphan_analysis", "CatPhanMainWindow"),
 ]
 
 

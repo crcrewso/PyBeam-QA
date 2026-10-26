@@ -52,12 +52,10 @@ def test_field_analysis_profiler_device():
 # --- new tools (pylinac analyses not implemented yet) -------------------------------------------------------------
 
 @planned
-def test_catphan_card_opens_and_analyses_demo_series():
-    """CatPhan 503/504/600/604: launcher card opens the window (test_launcher.TOOLS row); each demo series
-    (pylinac demo zips) analyses to COMPLETE with the matching phantom selected; the worksheet shows HU linearity per
-    material, uniformity, MTF and low-contrast results (not just the phantom name - see the copilot/fix-1 worked
-    example in docs/adding-a-pylinac-test.md); choosing the wrong phantom ends in FAILED with a message, not a hang.
-    Parity: every displayed number equals CatPhanXXX.results_data() from a direct call with the same tolerances."""
+def test_catphan504_and_700_series():
+    """The CatPhan tool is implemented and tested on pylinac's 503, 600 and 604 demo series (test_catphan.py). pylinac
+    has a 504 demo (not cached here) and no 700 demo: add both to test_catphan_matches_pylinac when the data is
+    available - the 700 needs a local, non-clinical scan."""
 
 
 @planned

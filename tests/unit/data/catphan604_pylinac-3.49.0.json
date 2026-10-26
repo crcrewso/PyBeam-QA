@@ -1,0 +1,347 @@
+{
+ "catphan_model": "604",
+ "catphan_roll_deg": 0.2765839719014167,
+ "ctp404": {
+  "avg_line_distance_mm": 49.99124107438529,
+  "geometry_passed": true,
+  "hu_linearity_passed": false,
+  "hu_rois": {
+   "20% Bone": {
+    "difference": 24.0,
+    "name": "20% Bone",
+    "nominal_value": 237.0,
+    "passed": true,
+    "stdev": 20.643850066482948,
+    "value": 261.0
+   },
+   "50% Bone": {
+    "difference": 44.0,
+    "name": "50% Bone",
+    "nominal_value": 725.0,
+    "passed": false,
+    "stdev": 34.816415908979145,
+    "value": 769.0
+   },
+   "Acrylic": {
+    "difference": -9.0,
+    "name": "Acrylic",
+    "nominal_value": 115.0,
+    "passed": true,
+    "stdev": 17.301650217302118,
+    "value": 106.0
+   },
+   "Air": {
+    "difference": 18.0,
+    "name": "Air",
+    "nominal_value": -1000.0,
+    "passed": true,
+    "stdev": 22.078474690014907,
+    "value": -982.0
+   },
+   "Delrin": {
+    "difference": -23.0,
+    "name": "Delrin",
+    "nominal_value": 365.0,
+    "passed": true,
+    "stdev": 22.04721238737409,
+    "value": 342.0
+   },
+   "LDPE": {
+    "difference": 0.0,
+    "name": "LDPE",
+    "nominal_value": -104.0,
+    "passed": true,
+    "stdev": 18.491144016459607,
+    "value": -104.0
+   },
+   "PMP": {
+    "difference": 3.0,
+    "name": "PMP",
+    "nominal_value": -196.0,
+    "passed": true,
+    "stdev": 18.22221368520672,
+    "value": -193.0
+   },
+   "Poly": {
+    "difference": 1.0,
+    "name": "Poly",
+    "nominal_value": -47.0,
+    "passed": true,
+    "stdev": 16.5160877799664,
+    "value": -46.0
+   },
+   "Teflon": {
+    "difference": -55.0,
+    "name": "Teflon",
+    "nominal_value": 1000.0,
+    "passed": false,
+    "stdev": 30.381259060318897,
+    "value": 945.0
+   }
+  },
+  "hu_tolerance": 40.0,
+  "line_distances_mm": [
+   49.996404346215236,
+   50.006716140141116,
+   49.98023039354287,
+   49.98161341764197
+  ],
+  "low_contrast_visibility": 3.3136010489079224,
+  "measured_slice_thickness_mm": 1.8130634976522033,
+  "offset": 0,
+  "thickness_num_slices_combined": 1,
+  "thickness_passed": true
+ },
+ "ctp486": {
+  "integral_non_uniformity": 0.0015007503751875938,
+  "nps_avg_power": 0.25904139164223455,
+  "nps_max_freq": 0.14814814814814814,
+  "passed": true,
+  "rois": {
+   "Bottom": {
+    "difference": 0.0,
+    "name": "Bottom",
+    "nominal_value": 0.0,
+    "passed": true,
+    "stdev": 17.846714794913453,
+    "value": 0.0
+   },
+   "Center": {
+    "difference": 1.0,
+    "name": "Center",
+    "nominal_value": 0.0,
+    "passed": true,
+    "stdev": 20.729147987320726,
+    "value": 1.0
+   },
+   "Left": {
+    "difference": 0.0,
+    "name": "Left",
+    "nominal_value": 0.0,
+    "passed": true,
+    "stdev": 17.43555642681057,
+    "value": 0.0
+   },
+   "Right": {
+    "difference": 0.0,
+    "name": "Right",
+    "nominal_value": 0.0,
+    "passed": true,
+    "stdev": 17.77965921339496,
+    "value": 0.0
+   },
+   "Top": {
+    "difference": -2.0,
+    "name": "Top",
+    "nominal_value": 0.0,
+    "passed": true,
+    "stdev": 17.78955353991778,
+    "value": -2.0
+   }
+  },
+  "uniformity_index": -0.2997002997002997
+ },
+ "ctp515": {
+  "cnr_threshold": 15.0,
+  "num_rois_seen": 1,
+  "roi_results": {
+   "15": {
+    "cnr": 0.009158500033351943,
+    "contrast": 0.11937377690802346,
+    "contrast method": "Michelson",
+    "passed visibility": true,
+    "signal to noise": 3.6570441144105277,
+    "visibility": 0.19053184954911445,
+    "visibility threshold": 0.15
+   },
+   "5": {
+    "cnr": 0.013419002479442008,
+    "contrast": 0.13178294573643423,
+    "contrast method": "Michelson",
+    "passed visibility": false,
+    "signal to noise": 4.955558680349227,
+    "visibility": 0.06979165125843452,
+    "visibility threshold": 0.15
+   },
+   "6": {
+    "cnr": 0.009266660761473708,
+    "contrast": 0.11500974658869398,
+    "contrast method": "Michelson",
+    "passed visibility": false,
+    "signal to noise": 3.8406382305138393,
+    "visibility": 0.06426066887220021,
+    "visibility threshold": 0.15
+   },
+   "7": {
+    "cnr": 0.007496400337376986,
+    "contrast": 0.10223953261927944,
+    "contrast method": "Michelson",
+    "passed visibility": false,
+    "signal to noise": 3.458351254691405,
+    "visibility": 0.0649807563119725,
+    "visibility threshold": 0.15
+   },
+   "8": {
+    "cnr": 0.010680038060620874,
+    "contrast": 0.15110683349374393,
+    "contrast method": "Michelson",
+    "passed visibility": false,
+    "signal to noise": 3.522156373620533,
+    "visibility": 0.11109283166100939,
+    "visibility threshold": 0.15
+   },
+   "9": {
+    "cnr": 0.008661906888958465,
+    "contrast": 0.10646766169154218,
+    "contrast method": "Michelson",
+    "passed visibility": false,
+    "signal to noise": 3.769548544713563,
+    "visibility": 0.105117140171771,
+    "visibility threshold": 0.15
+   }
+  },
+  "roi_settings": {
+   "15": {
+    "angle": -87.4,
+    "angle_corrected": -87.12341602809859,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 6,
+    "radius_pixels": 11.737302446714727
+   },
+   "5": {
+    "angle": -12.9,
+    "angle_corrected": -12.623416028098584,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 1.5,
+    "radius_pixels": 2.9343256116786818
+   },
+   "6": {
+    "angle": -25.1,
+    "angle_corrected": -24.823416028098585,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 2,
+    "radius_pixels": 3.912434148904909
+   },
+   "7": {
+    "angle": -38.5,
+    "angle_corrected": -38.22341602809858,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 2.5,
+    "radius_pixels": 4.890542686131136
+   },
+   "8": {
+    "angle": -52.7,
+    "angle_corrected": -52.423416028098586,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 3,
+    "radius_pixels": 5.8686512233573636
+   },
+   "9": {
+    "angle": -69.1,
+    "angle_corrected": -68.82341602809858,
+    "distance": 50,
+    "distance_pixels": 97.81085372262272,
+    "radius": 3.5,
+    "radius_pixels": 6.84675976058359
+   }
+  }
+ },
+ "ctp528": {
+  "mtf_lp_mm": {
+   "10": 0.6851735900468754,
+   "20": 0.5939071836240644,
+   "30": 0.5336209774046096,
+   "40": 0.48070023987640476,
+   "50": 0.43706628770310424,
+   "60": 0.39339834281619057,
+   "70": 0.34953855138956536,
+   "80": 0.30567875996294014,
+   "90": 0.2410208648175639
+  },
+  "roi_settings": {
+   "region 1": {
+    "end": 0.107,
+    "gap size (cm)": 0.5,
+    "lp/mm": 0.1,
+    "num peaks": 2,
+    "num valleys": 1,
+    "peak spacing": 0.021,
+    "start": 0
+   },
+   "region 2": {
+    "end": 0.173,
+    "gap size (cm)": 0.25,
+    "lp/mm": 0.2,
+    "num peaks": 3,
+    "num valleys": 2,
+    "peak spacing": 0.01,
+    "start": 0.107
+   },
+   "region 3": {
+    "end": 0.236,
+    "gap size (cm)": 0.167,
+    "lp/mm": 0.3,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.006,
+    "start": 0.173
+   },
+   "region 4": {
+    "end": 0.286,
+    "gap size (cm)": 0.125,
+    "lp/mm": 0.4,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.00557,
+    "start": 0.236
+   },
+   "region 5": {
+    "end": 0.335,
+    "gap size (cm)": 0.1,
+    "lp/mm": 0.5,
+    "num peaks": 4,
+    "num valleys": 3,
+    "peak spacing": 0.004777,
+    "start": 0.286
+   },
+   "region 6": {
+    "end": 0.387,
+    "gap size (cm)": 0.083,
+    "lp/mm": 0.6,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.00398,
+    "start": 0.335
+   },
+   "region 7": {
+    "end": 0.434,
+    "gap size (cm)": 0.071,
+    "lp/mm": 0.7,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.00358,
+    "start": 0.387
+   },
+   "region 8": {
+    "end": 0.479,
+    "gap size (cm)": 0.063,
+    "lp/mm": 0.8,
+    "num peaks": 5,
+    "num valleys": 4,
+    "peak spacing": 0.0027866,
+    "start": 0.434
+   }
+  },
+  "start_angle_radians": 3.141592653589793
+ },
+ "date_of_analysis": "2026-10-26T00:00:00",
+ "num_images": 93,
+ "origin_slice": 47,
+ "pylinac_version": "3.49.0",
+ "warnings": []
+}

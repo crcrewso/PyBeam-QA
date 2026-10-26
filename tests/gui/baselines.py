@@ -33,9 +33,13 @@ def stack_versions():
 
 
 def input_digest(paths):
-    """SHA-256 over each image's pixel data and beam angles, in a stable order."""
+    """SHA-256 over each image's pixel data and beam angles, in a stable order. A .zip (a whole CT series that is a
+    fixed file, such as pylinac's demo data) is fingerprinted by its bytes."""
     h = hashlib.sha256()
     for p in sorted(str(x) for x in paths):
+        if p.lower().endswith(".zip"):
+            h.update(Path(p).read_bytes())
+            continue
         ds = pydicom.dcmread(p)
         h.update(bytes(ds.PixelData))
         for tag in ("GantryAngle", "BeamLimitingDeviceAngle", "PatientSupportAngle"):

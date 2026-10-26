@@ -1,5 +1,5 @@
 {
- "written": "2026-10-26T04:47:30+00:00",
+ "written": "2026-10-26T05:15:05+00:00",
  "versions": {
   "pylinac": "3.49.0",
   "numpy": "2.5.4",
@@ -7,6 +7,34 @@
   "PySide6": "6.7.0"
  },
  "cases": {
+  "catphan604_demo": {
+   "input_sha256": "9e9b1d8d8e913d37f26a7f8a1a5113ffc2a3f91b7e9de35e413b108b539c4613",
+   "metrics": {
+    "hu_Air": -982.0,
+    "hu_PMP": -193.0,
+    "hu_50pct_Bone": 769.0,
+    "hu_LDPE": -104.0,
+    "hu_Poly": -46.0,
+    "hu_Acrylic": 106.0,
+    "hu_20pct_Bone": 261.0,
+    "hu_Delrin": 342.0,
+    "hu_Teflon": 945.0,
+    "roll_deg": 0.2765839719014167,
+    "uniformity_index": -0.2997002997002997,
+    "slice_thickness_mm": 1.8130634976522033,
+    "geometry_avg_line_distance_mm": 49.99124107438529,
+    "low_contrast_rois_seen": 1.0,
+    "mtf_10_lp_mm": 0.6851735900468754,
+    "mtf_20_lp_mm": 0.5939071836240644,
+    "mtf_30_lp_mm": 0.5336209774046096,
+    "mtf_40_lp_mm": 0.48070023987640476,
+    "mtf_50_lp_mm": 0.43706628770310424,
+    "mtf_60_lp_mm": 0.39339834281619057,
+    "mtf_70_lp_mm": 0.34953855138956536,
+    "mtf_80_lp_mm": 0.30567875996294014,
+    "mtf_90_lp_mm": 0.2410208648175639
+   }
+  },
   "fauxpid_cax_offset_7_mm_x_and_y": {
    "input_sha256": "3698d310f296289d83a2aaf43c94b9e0d2cfec454d502842d1ee2940044e8b24",
    "metrics": {

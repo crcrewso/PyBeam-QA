@@ -35,7 +35,25 @@ def field_case(qtbot, folder, image=None, **slopes):
     return [image], field_metrics(ws)
 
 
+def catphan_case(qtbot, folder, zip_name, phantom):
+    from pylinac.core.io import retrieve_demo_file
+    from ui.linac_qa.catphan_widgets import CatPhanMainWindow
+    try:
+        source = retrieve_demo_file(zip_name)
+    except Exception as err:
+        pytest.skip(f"pylinac demo file {zip_name} unavailable: {err}")
+    _, ws = run_worksheet(qtbot, CatPhanMainWindow, [source], lambda w: w.ui.phantomCB.setCurrentText(phantom))
+    r = ws.analysis_data["result"]
+    metrics = {f"hu_{m.name.replace(' ', '_').replace('%', 'pct')}": m.measured_hu for m in r.hu_materials}
+    metrics.update(roll_deg=r.roll_deg, uniformity_index=r.uniformity_index, slice_thickness_mm=r.slice_thickness_mm,
+                   geometry_avg_line_distance_mm=r.geometry_avg_line_distance_mm,
+                   low_contrast_rois_seen=r.low_contrast_rois_seen)
+    metrics.update({f"mtf_{p}_lp_mm": v for p, v in r.mtf_lp_mm if v is not None})
+    return [source], metrics
+
+
 CASES = {
+    "catphan604_demo": lambda qtbot, d, _: catphan_case(qtbot, d, "CatPhan604.zip", "CatPhan 604"),
     "wl_left_0.5mm": lambda qtbot, d, _: wl_case(qtbot, d, offset_mm_left=0.5),
     "wl_left2_in3_up6": lambda qtbot, d, _: wl_case(qtbot, d, offset_mm_left=2, offset_mm_in=3, offset_mm_up=6),
     "pf_perfect": lambda qtbot, d, _: pf_case(qtbot, d),
