@@ -38,7 +38,8 @@ the 10 baseline tests skip, or report drift against an older baseline. The CatPh
 | `test_parity.py` | **parity**: worksheet results equal a direct pylinac call with the worksheet's settings |
 | `test_baselines.py`, `baselines.py`, `baselines/` | **baseline**: per-pylinac-version snapshots and drift reports |
 | `test_catphan.py` | the CatPhan tool on pylinac's demo series: truth, parity, folder vs zip, failure paths, the PDF report |
-| `test_known_bugs.py` | strict expected failures: PyBeam bugs and reference-image bugs |
+| `test_failure_paths.py` | a failed analysis ends as FAILED with the worksheet usable again (Winston-Lutz) |
+| `test_known_bugs.py` | strict expected failures: open PyBeam bugs (none at present) and reference-image bugs |
 | `test_planned_tools.py` | described stubs for planned tools and missing tests |
 | `requirements.txt` | the pinned test environment |
 

@@ -475,6 +475,7 @@ class QFieldAnalysisWorksheet(QWidget):
                                            edge_smoothing_ratio = self.ui.edgeSmoothDSB.value(),
                                            hill_window_ratio = self.ui.hillWinRatioDSB.value(),
                                            interpolation = self.ui.interpolationCB.currentText(),
+                                           interpolation_resolution_mm = self.ui.interpolationResDSB.value(),
                                            in_field_ratio = self.ui.inFieldRatioDSB.value(),
                                            slope_exclusion_ratio = self.ui.slopeExclRatioDSB.value(),
                                            is_FFF = self.ui.fffBeamCheckB.isChecked(),

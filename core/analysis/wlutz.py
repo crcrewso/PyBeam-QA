@@ -133,12 +133,16 @@ class QWinstonLutzWorker(QObject):
         super().__init__()
 
         self.bb_size = bb_size
-        self._wl = QWinstonLutz(images, update_signal = self.images_analyzed,
-                          use_filenames = use_filenames)
+        self._images = images
+        self._use_filenames = use_filenames
 
     @Slot()
     def analyze(self):
         try:
+            # Load the images here, on the worker thread and inside the try: an unreadable file must reach the
+            # worksheet as analysis_failed rather than raise in the Analyze button's handler.
+            self._wl = QWinstonLutz(self._images, update_signal = self.images_analyzed,
+                                    use_filenames = self._use_filenames)
             self._wl.analyze(bb_size_mm = self.bb_size)
         
             wl_data = self._wl.results_data(as_dict=True)

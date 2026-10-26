@@ -331,9 +331,9 @@ The 504 and 700 are untested: there is no cached 504 demo, and no 700 demo exist
 
 These are on `main` and worth fixing alongside any new tool:
 
-1. **Winston-Lutz worker loads images on the GUI thread, outside its `try`** (`core/analysis/wlutz.py:130-137`).
-   An unreadable file leaves the worksheet stuck at "Analysis in progress…" (measured; see
-   `tests/gui/test_known_bugs.py`).
+1. *(Fixed on `integ/docs-catphan-ci`; test: `tests/gui/test_failure_paths.py`.)* **Winston-Lutz worker loads
+   images on the GUI thread, outside its `try`** (`core/analysis/wlutz.py:130-137`). An unreadable file leaves the
+   worksheet stuck at "Analysis in progress…" (measured).
 2. **Field Analysis `add_files()` takes no paths** (`field_analysis_widgets.py:240`). The other tools accept
    `add_files(files=None)`; matching them makes the tool scriptable and testable.
 3. **The "Add Image(s)" menu action is bound to the first worksheet's `add_files`**, not the current tab's (every

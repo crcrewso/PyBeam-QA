@@ -161,8 +161,8 @@ PyBeam errors.
 
 | Finding | Kind | Where |
 |---|---|---|
-| An unreadable file leaves the Winston-Lutz worksheet stuck at "Analysis in progress…": the worker loads images on the GUI thread, outside its `try`, so neither `analysis_failed` nor a dialog appears | truth / known bug | `core/analysis/wlutz.py:130`; `test_known_bugs.py` |
-| The Field Analysis "interpolation resolution" setting has no effect: the worksheet never passes it to the worker | parity / known bug | `field_analysis_widgets.py` `start_analysis`; `test_parity.py` |
+| An unreadable file leaves the Winston-Lutz worksheet stuck at "Analysis in progress…": the worker loads images on the GUI thread, outside its `try`, so neither `analysis_failed` nor a dialog appears | bug, **fixed** on `integ/docs-catphan-ci` (images now load inside the worker's `try`) | `core/analysis/wlutz.py`; `test_failure_paths.py` |
+| The Field Analysis "interpolation resolution" setting has no effect: the worksheet never passes it to the worker | bug, **fixed** on `integ/docs-catphan-ci` | `field_analysis_widgets.py` `start_analysis`; `test_parity.py` |
 | Every other Field Analysis setting reaches pylinac correctly (protocol, centring, edge method, normalisation, interpolation, in-field ratio, slope exclusion) | parity | `test_parity.py` |
 | PyBeam's `QWinstonLutz` override of `analyze()` gives exactly pylinac's numbers for a gantry-only set | parity | `test_parity.py` |
 | A Winston-Lutz result of 1.01 mm FAILs against a 1.0 mm tolerance (strict `<`) | design, see `results-stability.md` | `set_analysis_outcome` |

@@ -32,9 +32,12 @@ def linac_devices():
 
 @pytest.fixture(autouse=True)
 def no_modal_dialogs(monkeypatch):
-    """A failed analysis opens a modal MessageDialog, which would block an unattended run forever."""
+    """A failed analysis opens a modal dialog (PyBeam's MessageDialog, or a QMessageBox in the Winston-Lutz and Field
+    Analysis worksheets), which would block an unattended run forever."""
+    from PySide6.QtWidgets import QMessageBox
     from ui.util_widgets.dialogs import MessageDialog
     monkeypatch.setattr(MessageDialog, "exec", lambda self: 0)
+    monkeypatch.setattr(QMessageBox, "exec", lambda self: 0)
 
 
 @pytest.fixture(scope="session")

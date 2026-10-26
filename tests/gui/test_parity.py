@@ -42,10 +42,8 @@ FIELD_SETTINGS = [
     pytest.param(lambda u: u.interpolationCB.setCurrentText("Spline"), id="interpolation-spline"),
     pytest.param(lambda u: u.inFieldRatioDSB.setValue(0.7), id="in-field-ratio-0.7"),
     pytest.param(lambda u: u.slopeExclRatioDSB.setValue(0.3), id="slope-exclusion-0.3"),
-    pytest.param(lambda u: u.interpolationResDSB.setValue(0.5), id="interpolation-resolution-0.5",
-                 marks=pytest.mark.xfail(strict=True, reason="the worksheet never passes interpolationResDSB to "
-                                                             "QFieldAnalysisWorker (field_analysis_widgets.py "
-                                                             "start_analysis), so the setting has no effect")),
+    # was a known bug: the worksheet never passed interpolationResDSB to QFieldAnalysisWorker
+    pytest.param(lambda u: u.interpolationResDSB.setValue(0.5), id="interpolation-resolution-0.5"),
 ]
 
 

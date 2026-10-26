@@ -2,38 +2,15 @@
 XPASSes, pytest reports it (strict=True turns that into a failure), and the marker should be removed.
 
 Two groups:
-- PyBeam QA itself;
+- PyBeam QA itself: none open. The two found while writing these tests are fixed on integ/docs-catphan-ci, and
+  their tests now pass where they belong (test_failure_paths.py: an unreadable Winston-Lutz file; test_parity.py:
+  the Field Analysis interpolation resolution).
 - the linac-dicom-image-suite (FauxPID) reference images: these are problems in the *test data*, recorded so nobody
   mistakes them for PyBeam errors.
 """
 import pytest
 
-from helpers import DONE, field_metrics, run_worksheet
-from ui.util_widgets.statusbar import AnalysisInfoLabel
-
-
-# --- PyBeam QA ---------------------------------------------------------------------------------------------------
-
-@pytest.mark.qt_no_exception_capture
-@pytest.mark.xfail(strict=True, reason="QWinstonLutzWorker loads images in __init__ on the GUI thread, outside its try "
-                                       "(core/analysis/wlutz.py:130): an unreadable file raises in the Analyze click "
-                                       "handler, no analysis_failed is emitted, and the worksheet stays 'in progress'")
-def test_winston_lutz_unreadable_file_is_reported_as_failed(qtbot, tmp_path):
-    from PySide6.QtCore import Qt
-    from ui.linac_qa.winston_lutz_widgets import WinstonLutzMainWindow
-    win = WinstonLutzMainWindow()
-    qtbot.addWidget(win)
-    ws = win.ui.tabWidget.currentWidget()
-    ws.add_files([str(tmp_path / "missing_G0.dcm"), str(tmp_path / "missing_G90.dcm")])
-    for i in range(ws.ui.imageListWidget.count()):
-        ws.ui.imageListWidget.item(i).setCheckState(Qt.Checked)
-    with qtbot.waitSignal(ws.analysis_info_signal, timeout=10_000, raising=False,
-                          check_params_cb=lambda info: info["state"] in DONE):
-        try:
-            qtbot.mouseClick(ws.ui.analyzeBtn, Qt.LeftButton)
-        except Exception:
-            pass
-    assert ws.analysis_state == AnalysisInfoLabel.FAILED
+from helpers import field_metrics, run_worksheet
 
 
 # --- linac-dicom-image-suite reference images -------------------------------------------------------------------
