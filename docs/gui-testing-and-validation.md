@@ -31,7 +31,8 @@ PySide6 runs without a display in two ways:
 - **Xvfb**: a virtual X display (`xvfb-run pytest tests/gui`). Use it to test things that need a real window
   system, or to watch via VNC.
 
-Install the app's dependencies plus `pytest` and `pytest-qt` (pinned list: `tests/gui/requirements.txt`). On Ubuntu,
+Install the app's locked dependencies plus `pytest` and `pytest-qt`, all pinned: `pip install -r
+tests/gui/requirements.txt` includes the app's `requirements.txt`. On Ubuntu,
 the Qt xcb libraries are also needed (`libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0
 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 libegl1`) when using Xvfb.
 

@@ -30,19 +30,22 @@ The program includes some of these complementary features:
 - Quick creation of benchmark images and tests.
 
 ## Requirements
-As of current the program depends on the following:
-- Python (3.10+)
-- PySide6 (6.4+)
-- PySide6_utils (1.2+)
-- pylinac (3.22.0+)
-- pyqtgraph (0.13.3+)
-- pdfrw (0.4)
+- Python 3.12. PySide6 6.7.0 supports Python up to 3.12, and 3.12 is the version the dependency lock is made and
+tested for.
+- The packages in [`requirements.txt`](requirements.txt), which pins every package exactly. In particular:
+  - pylinac 3.49.0. Results can move between pylinac versions, so it is pinned, and upgraded on purpose (see
+    [`docs/results-stability.md`](docs/results-stability.md));
+  - PySide6 6.7.0, the version that generated `ui/py_ui/`;
+  - pyqtgraph, reportlab, pdfrw, py_linq, numpy, scipy and matplotlib.
+
+The direct dependencies are listed in [`requirements.in`](requirements.in), which also says how to recompile the
+lock.
 
 ## Installation
 1. Download the source code from the repository.
 2. (Optional but highly recommended) Create a virtual environment for PyBeam-QA to avoid dependency conflicts
-with existing python libraries. You can use a dependency manager such as `Pipenv` to accomplish this.
-3. Install all the required dependencies using `pip3` (e.g `pip3 install pdfrw==0.4`).
+with existing python libraries, e.g. `python3.12 -m venv .venv`.
+3. Install the dependencies: `pip3 install -r requirements.txt` (or `uv pip install -r requirements.txt`).
 
 ## Quick start
 To run the application simply navigate to the source code directory and run the following command:\

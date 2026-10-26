@@ -241,8 +241,10 @@ Use `<name>` for the module stem (e.g. `vmat`), `<Name>` for class names (e.g. `
 6. **Register** in `ui/app_main_win.py`: import, `installEventFilter`, `qa_windows["<key>"]`, and the `eventFilter`
    branch (§2.1).
 7. **Report:** add `<Name>Report(BaseReport)` to `core/tools/report.py`.
-8. **Dependencies:** if you add a library, update the README requirements and the About dialog
-   (`ui/util_widgets/dialogs.py`).
+8. **Dependencies:** if you add a library:
+   - add it to `requirements.in`;
+   - recompile the lock `requirements.txt` with the command at the top of `requirements.in`;
+   - update the README requirements and the About dialog (`ui/util_widgets/dialogs.py`).
 9. **Tests:**
    - add a launcher test and at least one known-answer test under `tests/gui/` (see
      [`gui-testing-and-validation.md`](gui-testing-and-validation.md));
@@ -337,7 +339,8 @@ These are on `main` and worth fixing alongside any new tool:
 3. **The "Add Image(s)" menu action is bound to the first worksheet's `add_files`**, not the current tab's (every
    `*MainWindow.__init__`).
 4. **`main.py` sets the Windows AppUserModelID to `radlab.pybeamqa-0.1.2`**, while `core/__init__.py` says `0.2.0`.
-5. **README requirements omit `reportlab` and `py_linq`**, which the code imports, and list `PySide6_utils`, which
+5. *(Fixed on `integ/docs-catphan-ci`: the README now points to an exact lock, `requirements.txt`.)*
+   **README requirements omit `reportlab` and `py_linq`**, which the code imports, and list `PySide6_utils`, which
    nothing imports.
 6. **`core/configuration/data/workspace.json` stores `"workspace_path": "null"` as a string**, so the first-run
    setup wizard check (`== None` in `main.py`) never fires (read, not run).
