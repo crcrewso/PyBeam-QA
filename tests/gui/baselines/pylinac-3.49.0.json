@@ -1,0 +1,144 @@
+{
+ "written": "2026-10-26T04:47:30+00:00",
+ "versions": {
+  "pylinac": "3.49.0",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "PySide6": "6.7.0"
+ },
+ "cases": {
+  "fauxpid_cax_offset_7_mm_x_and_y": {
+   "input_sha256": "3698d310f296289d83a2aaf43c94b9e0d2cfec454d502842d1ee2940044e8b24",
+   "metrics": {
+    "field_size_vertical_mm": 100.12344562370099,
+    "field_size_horizontal_mm": 100.12344562370099,
+    "left_penumbra_mm": 3.3959549167746585,
+    "right_penumbra_mm": 3.3652885324860056,
+    "top_penumbra_mm": 3.3959549167746585,
+    "bottom_penumbra_mm": 3.3652885324860056,
+    "cax_offset_x_mm": 7.064666771208611,
+    "cax_offset_y_mm": 7.064666771208611,
+    "symmetry_horizontal": -0.8827323735908444,
+    "symmetry_vertical": -0.8827323735908444,
+    "flatness_horizontal": 1.0926141262942588,
+    "flatness_vertical": 1.0926141262942588
+   }
+  },
+  "fauxpid_flatness_two_percent_variance": {
+   "input_sha256": "c4b9369a2594066c6d8deae112e113764eb6943ce33ecc10e15913170cf40092",
+   "metrics": {
+    "field_size_vertical_mm": 100.14217820968443,
+    "field_size_horizontal_mm": 100.14217820968443,
+    "left_penumbra_mm": 3.364444566666392,
+    "right_penumbra_mm": 3.364444566666411,
+    "top_penumbra_mm": 3.364444566666392,
+    "bottom_penumbra_mm": 3.364444566666411,
+    "cax_offset_x_mm": 0.0,
+    "cax_offset_y_mm": 0.0,
+    "symmetry_horizontal": 0.002023110149651508,
+    "symmetry_vertical": 0.002023110149651508,
+    "flatness_horizontal": 0.7642083586206171,
+    "flatness_vertical": 0.7642083586206171
+   }
+  },
+  "fauxpid_penumbra_2_mm": {
+   "input_sha256": "62390e5a9b8f4d0a7a3819fe7480c00156849d7580182dd29d3bad18b5768c5b",
+   "metrics": {
+    "field_size_vertical_mm": 100.14359676729806,
+    "field_size_horizontal_mm": 100.14359676729806,
+    "left_penumbra_mm": 2.022478524320629,
+    "right_penumbra_mm": 2.02247852432061,
+    "top_penumbra_mm": 2.022478524320629,
+    "bottom_penumbra_mm": 2.02247852432061,
+    "cax_offset_x_mm": 0.0,
+    "cax_offset_y_mm": 0.0,
+    "symmetry_horizontal": 0.007631229915205928,
+    "symmetry_vertical": 0.007631229915205928,
+    "flatness_horizontal": 2.9226666040809612,
+    "flatness_vertical": 2.9226666040809612
+   }
+  },
+  "fauxpid_symmetry_two_percent_x_point_ratio": {
+   "input_sha256": "4273278df7768b1376efd70785a4e4078c24fa5d4d8709ec8f0fcfd5c5e5cd9f",
+   "metrics": {
+    "field_size_vertical_mm": 100.15461327444311,
+    "field_size_horizontal_mm": 100.08106776479296,
+    "left_penumbra_mm": 3.350844282032334,
+    "right_penumbra_mm": 3.48914847090167,
+    "top_penumbra_mm": 3.3560957340310846,
+    "bottom_penumbra_mm": 3.3560957340311037,
+    "cax_offset_x_mm": -0.04076401979255451,
+    "cax_offset_y_mm": 0.0,
+    "symmetry_horizontal": 2.761318488316933,
+    "symmetry_vertical": 0.004473004725191743,
+    "flatness_horizontal": 2.4009549017786886,
+    "flatness_vertical": 1.6926257348326976
+   }
+  },
+  "field_open_100mm": {
+   "input_sha256": "939493b4ff16cd397c10460f6bbe8dfc029f1f2c6b0cac38851872e396229786",
+   "metrics": {
+    "field_size_vertical_mm": 100.14223590817652,
+    "field_size_horizontal_mm": 100.14223590817652,
+    "left_penumbra_mm": 3.3644446865665483,
+    "right_penumbra_mm": 3.364444686566529,
+    "top_penumbra_mm": 3.3644446865665483,
+    "bottom_penumbra_mm": 3.364444686566529,
+    "cax_offset_x_mm": 0.0,
+    "cax_offset_y_mm": 0.0,
+    "symmetry_horizontal": 0.0021916681889111445,
+    "symmetry_vertical": 0.0021916681889111445,
+    "flatness_horizontal": 0.8274650272191195,
+    "flatness_vertical": 0.8274650272191195
+   }
+  },
+  "field_tilted_100mm": {
+   "input_sha256": "263ba7b290264146a7d6559a8e115e6fba987a5354ceb3bbd2bca053c5c6a810",
+   "metrics": {
+    "field_size_vertical_mm": 100.1217858640476,
+    "field_size_horizontal_mm": 100.1145727544262,
+    "left_penumbra_mm": 3.3993450177744804,
+    "right_penumbra_mm": 3.3738711600777775,
+    "top_penumbra_mm": 3.3721644866685434,
+    "bottom_penumbra_mm": 3.388794555895415,
+    "cax_offset_x_mm": 0.006904879617469106,
+    "cax_offset_y_mm": -0.004297640634987943,
+    "symmetry_horizontal": -0.8605908919699479,
+    "symmetry_vertical": 0.5678295918067455,
+    "flatness_horizontal": 1.0293929106080497,
+    "flatness_vertical": 0.9688192890412447
+   }
+  },
+  "pf_perfect": {
+   "input_sha256": "c9615a58f363c0a7cecb76e2a4bd5406a3cebf0cd435d00443371eb47dad7b7d",
+   "metrics": {
+    "max_error_mm": 0.00031032722472446045,
+    "abs_median_error_mm": 5.376237169002708e-06
+   }
+  },
+  "wl_left2_in3_up6": {
+   "input_sha256": "536f94dacf365289320c0ec0a2f935192fc5a7e7c5ea518a16252d87c8ac9a71",
+   "metrics": {
+    "max_2d_cax_to_bb_mm": 6.763463301588579,
+    "median_2d_cax_to_bb_mm": 5.195468424614191,
+    "mean_2d_cax_to_bb_mm": 5.180006891828706,
+    "gantry_3d_iso_diameter_mm": 0.06748560359706737,
+    "bb_shift_x_mm": 2.0005965000752637,
+    "bb_shift_y_mm": -2.9968980514952808,
+    "bb_shift_z_mm": -6.057988288717745
+   }
+  },
+  "wl_left_0.5mm": {
+   "input_sha256": "8da4ff761823e0a12260bcd7845ebea1fbf7c6d0b7c85c31fa2b54a1c28db8e0",
+   "metrics": {
+    "max_2d_cax_to_bb_mm": 0.4568877547664961,
+    "median_2d_cax_to_bb_mm": 0.22844387738324806,
+    "mean_2d_cax_to_bb_mm": 0.22844387738324806,
+    "gantry_3d_iso_diameter_mm": 1.3063756552959694e-07,
+    "bb_shift_x_mm": 0.45688775476649596,
+    "bb_shift_y_mm": -2.797630632222052e-17,
+    "bb_shift_z_mm": -5.595261264444102e-17
+   }
+  }
+ }
+}

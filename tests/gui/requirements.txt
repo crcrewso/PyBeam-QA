@@ -1,0 +1,12 @@
+# Test environment for tests/gui (Python 3.12). The app's own dependencies plus the test tools.
+# PySide6 6.7.0 is the version that generated ui/py_ui/*; pin pylinac exactly in real use (see docs/results-stability.md).
+PySide6==6.7.0
+pylinac==3.49.0
+pyqtgraph
+reportlab
+pdfrw
+py_linq
+pytest
+pytest-qt
+# optional: linac-dicom-image-suite (package FauxPID) for its known-answer images; tests that need it are skipped without it
+# FauxPID @ git+https://github.com/crcrewso/linac-dicom-image-suite.git@1014da2
